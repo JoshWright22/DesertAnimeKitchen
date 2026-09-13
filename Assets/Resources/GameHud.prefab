@@ -1372,17 +1372,15 @@ MonoBehaviour:
 
     1-9 - pick building, R - rotate
 
-    G - toggle grid lines
-
-    Left
-    click - build (hold to drag)
+    Left click - build (hold to
+    drag)
 
     Right click - remove
 
-    Click a cook girl
-    to swap recipe
+    Click a cook girl to swap recipe
 
-    Esc / Q - cancel'
+    Esc
+    / Q - cancel'
 --- !u!1 &8885337116131456673
 GameObject:
   m_ObjectHideFlags: 0

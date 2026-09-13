@@ -36,7 +36,7 @@ namespace DessertFactory
             return Cached("gridcell", () =>
             {
                 var tex = NewTexture(Size);
-                var line = new Color(0.2f, 0.12f, 0.05f, 0.25f);
+                var line = new Color(0.2f, 0.12f, 0.05f, 0.35f);
                 for (int i = 0; i < Size; i++)
                 {
                     tex.SetPixel(i, 0, line);
@@ -44,6 +44,26 @@ namespace DessertFactory
                 }
                 tex.Apply();
                 return Sprite.Create(tex, new Rect(0, 0, Size, Size), new Vector2(0.5f, 0.5f), Size, 0, SpriteMeshType.FullRect);
+            });
+        }
+
+        // Border around the whole cell, tinted per deposit
+        public static Sprite CellOutline()
+        {
+            return Cached("celloutline", () =>
+            {
+                var tex = NewTexture(Size);
+                for (int i = 0; i < Size; i++)
+                {
+                    for (int w = 0; w < 2; w++)
+                    {
+                        tex.SetPixel(i, w, Color.white);
+                        tex.SetPixel(i, Size - 1 - w, Color.white);
+                        tex.SetPixel(w, i, Color.white);
+                        tex.SetPixel(Size - 1 - w, i, Color.white);
+                    }
+                }
+                return Finish(tex);
             });
         }
 

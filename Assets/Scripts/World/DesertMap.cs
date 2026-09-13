@@ -10,6 +10,7 @@ namespace DessertFactory
     {
         [SerializeField] Tilemap groundLayer;
         [SerializeField] Tilemap depositLayer;
+        [SerializeField] Tilemap depositGridLayer;
         [Tooltip("Sprite used for every ground/deposit tile. Tinted per cell. Leave empty for a plain square.")]
         [SerializeField] Sprite tileSprite;
 
@@ -22,13 +23,8 @@ namespace DessertFactory
         int[] depositAmount;
         Color[] sandColors;
         Tile tile;
+        Tile outlineTile;
         SpriteRenderer gridLines;
-
-        public bool ShowGridLines
-        {
-            get => gridLines != null && gridLines.enabled;
-            set { if (gridLines != null) gridLines.enabled = value; }
-        }
 
         public void Generate(int width, int height, List<DepositDef> deposits, int seed, bool scatterDeposits)
         {
@@ -88,10 +84,16 @@ namespace DessertFactory
                 groundLayer = CreateLayer("Ground", -10);
             if (depositLayer == null)
                 depositLayer = CreateLayer("Deposits", -9);
+            if (depositGridLayer == null)
+                depositGridLayer = CreateLayer("Deposit Grid", -4);
 
             tile = ScriptableObject.CreateInstance<Tile>();
             tile.sprite = tileSprite != null ? tileSprite : SpriteFactory.Square();
             tile.flags = TileFlags.None;
+
+            outlineTile = ScriptableObject.CreateInstance<Tile>();
+            outlineTile.sprite = SpriteFactory.CellOutline();
+            outlineTile.flags = TileFlags.None;
         }
 
         Tilemap CreateLayer(string layerName, int sortingOrder)
@@ -165,6 +167,7 @@ namespace DessertFactory
         void DrawAllDeposits()
         {
             depositLayer.ClearAllTiles();
+            depositGridLayer.ClearAllTiles();
             for (int y = 0; y < Height; y++)
                 for (int x = 0; x < Width; x++)
                     RefreshDepositCell(new Vector2Int(x, y));
@@ -177,11 +180,16 @@ namespace DessertFactory
             if (depositIndex[i] < 0)
             {
                 depositLayer.SetTile(pos, null);
+                depositGridLayer.SetTile(pos, null);
                 return;
             }
 
+            var deposit = depositTypes[depositIndex[i]];
+            depositGridLayer.SetTile(pos, outlineTile);
+            depositGridLayer.SetColor(pos, deposit.gridColor);
+
             // speckle the deposit a bit so it reads as stuff in the sand
-            var color = depositTypes[depositIndex[i]].groundColor;
+            var color = deposit.groundColor;
             if ((cell.x * 7 + cell.y * 13) % 5 == 0)
                 color = Color.Lerp(color, sandColors[i], 0.5f);
 
@@ -204,7 +212,6 @@ namespace DessertFactory
             gridLines.size = new Vector2(Width, Height);
             gridLines.transform.localScale = new Vector3(cellSize.x, cellSize.y, 1f);
             gridLines.transform.localPosition = new Vector3(Width * cellSize.x / 2f, Height * cellSize.y / 2f, 0f);
-            gridLines.enabled = false;
         }
 
         public bool InBounds(Vector2Int cell)

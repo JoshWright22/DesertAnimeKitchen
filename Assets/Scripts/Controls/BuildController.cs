@@ -13,7 +13,6 @@ namespace DessertFactory
 
         SpriteRenderer ghost;
         SpriteRenderer ghostArrow;
-        bool gridToggled;
 
         public BuildingDef Selected { get; private set; }
         public Direction Facing { get; private set; } = Direction.Right;
@@ -63,7 +62,6 @@ namespace DessertFactory
             PointerOverWorld = !hud.IsPointerOverUi();
             HoveredCell = factory.Map.WorldToCell(cam.ScreenToWorldPoint(screenPos));
 
-            factory.Map.ShowGridLines = gridToggled || Selected != null;
             UpdateGhost();
 
             if (!PointerOverWorld)
@@ -94,9 +92,6 @@ namespace DessertFactory
 
             if (keyboard.escapeKey.wasPressedThisFrame || keyboard.qKey.wasPressedThisFrame)
                 Select(null);
-
-            if (keyboard.gKey.wasPressedThisFrame)
-                gridToggled = !gridToggled;
 
             if (keyboard.rKey.wasPressedThisFrame)
             {

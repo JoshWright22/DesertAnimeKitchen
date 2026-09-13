@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.DepositDef
   item: {fileID: 11400000, guid: 4ab4d173e12b3aa4f90d9a660fbf2a72, type: 2}
   groundColor: {r: 0.93, g: 0.9, b: 0.82, a: 1}
+  gridColor: {r: 1, g: 1, b: 1, a: 1}
   patchCount: 5
   patchRadius: 5
   amountPerTile: 300

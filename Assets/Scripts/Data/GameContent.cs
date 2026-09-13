@@ -32,11 +32,11 @@ namespace DessertFactory
             var sorbet = content.AddItem("Cactus Sorbet", new Color(1f, 0.5f, 0.75f), 22);
             var cookies = content.AddItem("Sugar Cookies", new Color(0.95f, 0.8f, 0.45f), 14);
 
-            content.AddDeposit(sugarSand, new Color(0.93f, 0.9f, 0.82f), 5, 5f);
-            content.AddDeposit(dates, new Color(0.5f, 0.32f, 0.18f), 4, 3.5f);
-            content.AddDeposit(cactusFruit, new Color(0.45f, 0.62f, 0.35f), 4, 3.5f);
-            content.AddDeposit(millet, new Color(0.82f, 0.68f, 0.3f), 4, 4.5f);
-            content.AddDeposit(water, new Color(0.35f, 0.6f, 0.8f), 3, 3f, 5000);
+            content.AddDeposit(sugarSand, new Color(0.93f, 0.9f, 0.82f), Color.white, 5, 5f);
+            content.AddDeposit(dates, new Color(0.5f, 0.32f, 0.18f), new Color(0.35f, 0.15f, 0.05f), 4, 3.5f);
+            content.AddDeposit(cactusFruit, new Color(0.45f, 0.62f, 0.35f), new Color(0.15f, 0.8f, 0.3f), 4, 3.5f);
+            content.AddDeposit(millet, new Color(0.82f, 0.68f, 0.3f), new Color(1f, 0.85f, 0.05f), 4, 4.5f);
+            content.AddDeposit(water, new Color(0.35f, 0.6f, 0.8f), new Color(0.1f, 0.45f, 1f), 3, 3f, 5000);
 
             var prepRecipes = new List<RecipeDef>
             {
@@ -101,12 +101,13 @@ namespace DessertFactory
             return item;
         }
 
-        void AddDeposit(ItemDef item, Color groundColor, int patches, float radius, int amountPerTile = 300)
+        void AddDeposit(ItemDef item, Color groundColor, Color gridColor, int patches, float radius, int amountPerTile = 300)
         {
             var deposit = CreateInstance<DepositDef>();
             deposit.name = item.displayName + " Deposit";
             deposit.item = item;
             deposit.groundColor = groundColor;
+            deposit.gridColor = gridColor;
             deposit.patchCount = patches;
             deposit.patchRadius = radius;
             deposit.amountPerTile = amountPerTile;
