@@ -91,7 +91,7 @@ namespace DessertFactory
             var controller = cam.GetComponent<CameraController>();
             if (controller == null)
                 controller = cam.gameObject.AddComponent<CameraController>();
-            controller.Init(worldSize);
+            controller.Init(worldSize, desert.Grid.cellSize.y);
             return cam;
         }
     }

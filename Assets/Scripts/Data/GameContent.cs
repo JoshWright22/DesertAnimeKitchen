@@ -57,10 +57,10 @@ namespace DessertFactory
                 "Moves ingredients along. Drag to lay a line.");
             belt.workTime = 0.6f;
 
-            var digger = content.AddBuilding("Digger Girl", BuildingKind.Harvester, 20,
-                "Digs up whatever is buried under her and passes it forward. Place on a deposit.");
-            digger.workTime = 1.2f;
-            digger.needsDeposit = true;
+            var miner = content.AddBuilding("Miner Girl", BuildingKind.Miner, 20,
+                "Mines whatever is buried under her and passes it forward. Place on a deposit.");
+            miner.workTime = 1.2f;
+            miner.needsDeposit = true;
 
             var prep = content.AddBuilding("Prep Girl", BuildingKind.Cook, 35,
                 "Turns raw ingredients into sugar, flour, syrup and dough. Click her to change recipe.");

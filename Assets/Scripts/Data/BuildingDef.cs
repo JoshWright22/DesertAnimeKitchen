@@ -6,7 +6,7 @@ namespace DessertFactory
     public enum BuildingKind
     {
         Conveyor,
-        Harvester,
+        Miner,
         Cook,
         Stall
     }
@@ -26,7 +26,7 @@ namespace DessertFactory
         public Sprite sprite;
 
         [Header("Work")]
-        [Tooltip("Harvesters: seconds per item. Conveyors: seconds to cross one tile.")]
+        [Tooltip("Miners: seconds per item. Conveyors: seconds to cross one tile.")]
         public float workTime = 1f;
         public bool needsDeposit;
         public List<RecipeDef> recipes = new List<RecipeDef>();

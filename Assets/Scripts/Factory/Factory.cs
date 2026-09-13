@@ -81,7 +81,7 @@ namespace DessertFactory
             switch (def.kind)
             {
                 case BuildingKind.Conveyor: building = go.AddComponent<Conveyor>(); break;
-                case BuildingKind.Harvester: building = go.AddComponent<HarvesterGirl>(); break;
+                case BuildingKind.Miner: building = go.AddComponent<MinerGirl>(); break;
                 case BuildingKind.Cook: building = go.AddComponent<CookGirl>(); break;
                 default: building = go.AddComponent<DessertStall>(); break;
             }

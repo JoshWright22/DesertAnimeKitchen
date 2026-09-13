@@ -56,7 +56,7 @@ namespace DessertFactory.EditorTools
             Debug.Log($"Test content written to {Root}");
         }
 
-        // A small sorbet line: sugar and syrup get prepped, water is dug right next to
+        // A small sorbet line: sugar and syrup get prepped, water is mined right next to
         // the pastry girl, and the sorbet goes off to a stall. Dates get stockpiled on the side.
         static void FillTestLayout(FactoryLayout layout, GameContent content)
         {
@@ -64,7 +64,7 @@ namespace DessertFactory.EditorTools
             BuildingDef Building(string buildingName) => content.buildings.First(b => b.displayName == buildingName);
 
             var belt = Building("Conveyor Belt");
-            var digger = Building("Digger Girl");
+            var miner = Building("Miner Girl");
             var prep = Building("Prep Girl");
             var pastry = Building("Pastry Girl");
             var stall = Building("Dessert Stall");
@@ -94,15 +94,15 @@ namespace DessertFactory.EditorTools
             Area("Dates", 2, 16, 3, 3);
 
             // sugar
-            Put(digger, 3, 11, Direction.Right);
-            Put(digger, 4, 12, Direction.Down);
+            Put(miner, 3, 11, Direction.Right);
+            Put(miner, 4, 12, Direction.Down);
             Belts(4, 6, 11, Direction.Right);
             Put(prep, 7, 11, Direction.Right, recipe: 0);
             Belts(8, 19, 11, Direction.Right);
 
             // cactus syrup, comes around the bottom and up into the pastry girl
-            Put(digger, 3, 6, Direction.Right);
-            Put(digger, 4, 7, Direction.Down);
+            Put(miner, 3, 6, Direction.Right);
+            Put(miner, 4, 7, Direction.Down);
             Belts(4, 6, 6, Direction.Right);
             Put(prep, 7, 6, Direction.Right, recipe: 2);
             Belts(8, 19, 6, Direction.Right);
@@ -110,14 +110,14 @@ namespace DessertFactory.EditorTools
                 Put(belt, 20, y, Direction.Up);
 
             // water straight from the ground into her
-            Put(digger, 21, 12, Direction.Down);
+            Put(miner, 21, 12, Direction.Down);
 
             Put(pastry, 20, 10, Direction.Right, recipe: 1);
             Put(belt, 22, 10, Direction.Right);
             Put(stall, 23, 9, Direction.Right);
 
             // dates just get stored
-            Put(digger, 3, 17, Direction.Right);
+            Put(miner, 3, 17, Direction.Right);
             Belts(4, 9, 17, Direction.Right);
             Put(stall, 10, 17, Direction.Right);
         }

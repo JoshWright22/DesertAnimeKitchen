@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace DessertFactory
 {
-    public class HarvesterGirl : Building
+    public class MinerGirl : Building
     {
         float timer;
         ItemDef holding;
@@ -20,23 +20,23 @@ namespace DessertFactory
                 holding = null;
             }
 
-            if (!FindDigCell(out var cell))
+            if (!FindMineCell(out var cell))
             {
-                status = "Nothing left to dig";
+                status = "Nothing left to mine";
                 return;
             }
 
-            status = "Digging";
+            status = "Mining";
             timer += deltaTime;
             if (timer >= Def.workTime)
             {
                 timer = 0f;
-                Factory.Map.TryDig(cell, out holding);
+                Factory.Map.TryMine(cell, out holding);
             }
         }
 
-        // Bigger diggers work through every cell under them
-        bool FindDigCell(out Vector2Int cell)
+        // Bigger miners work through every cell under them
+        bool FindMineCell(out Vector2Int cell)
         {
             foreach (var c in Cells)
             {
@@ -63,7 +63,7 @@ namespace DessertFactory
 
         public override string GetStatus()
         {
-            if (!FindDigCell(out var cell))
+            if (!FindMineCell(out var cell))
                 return status;
             return $"{status} ({Factory.Map.GetDeposit(cell).item.displayName}, {Factory.Map.GetAmount(cell)} left here)";
         }

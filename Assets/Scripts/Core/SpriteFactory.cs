@@ -8,6 +8,9 @@ namespace DessertFactory
     {
         const int Size = 32;
 
+        // texels per cell in the grid line textures
+        public const int GridTexels = Size;
+
         static readonly Dictionary<string, Sprite> cache = new Dictionary<string, Sprite>();
 
         public static Sprite Square()

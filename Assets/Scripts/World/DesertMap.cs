@@ -232,7 +232,7 @@ namespace DessertFactory
             return InBounds(cell) ? depositAmount[cell.y * Width + cell.x] : 0;
         }
 
-        public bool TryDig(Vector2Int cell, out ItemDef item)
+        public bool TryMine(Vector2Int cell, out ItemDef item)
         {
             item = null;
             var deposit = GetDeposit(cell);

@@ -10,12 +10,14 @@ namespace DessertFactory
         public float panSpeed = 1.2f;
         public float zoomStep = 1.15f;
         public float minZoom = 3f;
+        [Tooltip("Hard limit, zooming out also stops once grid lines would get thinner than a pixel")]
         public float maxZoom = 40f;
         [Tooltip("How far in pixels the mouse has to move before a right click counts as a drag")]
         public float dragThreshold = 6f;
 
         Camera cam;
         Vector2 mapSize;
+        float cellHeight = 1f;
 
         bool dragging;
         Vector2 pressScreenPos;
@@ -27,9 +29,21 @@ namespace DessertFactory
         // Stays true on the frame the button is released so clicks can tell they were really drags
         public bool DraggedThisPress { get; private set; }
 
-        public void Init(Vector2 size)
+        public void Init(Vector2 size, float cellWorldHeight)
         {
             mapSize = size;
+            cellHeight = cellWorldHeight;
+        }
+
+        // Grid lines are one texel of a SpriteFactory.GridTexels sized cell, so a cell has to
+        // cover at least that many screen pixels or the lines start breaking up
+        float MaxZoom
+        {
+            get
+            {
+                float limit = cellHeight * Screen.height / (2f * SpriteFactory.GridTexels);
+                return Mathf.Max(minZoom, Mathf.Min(maxZoom, limit));
+            }
         }
 
         void Awake()
@@ -63,6 +77,8 @@ namespace DessertFactory
                     ZoomTowards(mouse.position.ReadValue(), scroll > 0 ? 1f / zoomStep : zoomStep);
             }
 
+            // window size can change, so keep checking
+            cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, minZoom, MaxZoom);
             ClampToMap();
         }
 
@@ -105,7 +121,7 @@ namespace DessertFactory
         void ZoomTowards(Vector2 screenPoint, float factor)
         {
             var before = cam.ScreenToWorldPoint(screenPoint);
-            cam.orthographicSize = Mathf.Clamp(cam.orthographicSize * factor, minZoom, maxZoom);
+            cam.orthographicSize = Mathf.Clamp(cam.orthographicSize * factor, minZoom, MaxZoom);
             var after = cam.ScreenToWorldPoint(screenPoint);
             transform.position += before - after;
         }
