@@ -23,7 +23,7 @@ namespace DessertFactory
             body.transform.SetParent(transform, false);
             body.transform.localRotation = Quaternion.Euler(0, 0, Facing.ToAngle());
             body.transform.localScale = Factory.Map.Grid.cellSize;
-            body.sprite = Def.sprite != null ? Def.sprite : SpriteFactory.Belt(Def.outfitColor);
+            body.sprite = Def.sprite != null ? Def.sprite : SpriteFactory.Belt();
             body.sortingOrder = 2;
         }
 

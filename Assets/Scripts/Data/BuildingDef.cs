@@ -22,10 +22,8 @@ namespace DessertFactory
         public Vector2Int size = Vector2Int.one;
 
         [Header("Look")]
-        [Tooltip("Optional, placeholder art is drawn from the colors below if empty")]
+        [Tooltip("A plain placeholder is shown if empty")]
         public Sprite sprite;
-        public Color outfitColor = Color.white;
-        public Color hairColor = Color.black;
 
         [Header("Work")]
         [Tooltip("Harvesters: seconds per item. Conveyors: seconds to cross one tile.")]

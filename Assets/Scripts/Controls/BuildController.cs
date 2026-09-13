@@ -107,12 +107,12 @@ namespace DessertFactory
 
             if (Selected.kind == BuildingKind.Conveyor)
             {
-                ghost.sprite = Selected.sprite != null ? Selected.sprite : SpriteFactory.Belt(Selected.outfitColor);
+                ghost.sprite = Selected.sprite != null ? Selected.sprite : SpriteFactory.Belt();
                 ghost.transform.rotation = Quaternion.Euler(0, 0, Facing.ToAngle());
             }
             else
             {
-                ghost.sprite = Selected.sprite != null ? Selected.sprite : SpriteFactory.Girl(Selected.outfitColor, Selected.hairColor);
+                ghost.sprite = Selected.sprite != null ? Selected.sprite : SpriteFactory.Square();
                 ghost.transform.rotation = Quaternion.identity;
             }
 

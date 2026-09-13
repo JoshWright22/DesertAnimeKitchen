@@ -67,18 +67,6 @@ namespace DessertFactory
             });
         }
 
-        public static Sprite ItemIcon(Color color)
-        {
-            return Cached("item" + color, () =>
-            {
-                var tex = NewTexture(Size);
-                DrawCircle(tex, 15.5f, 15.5f, 13f, Color.Lerp(color, Color.black, 0.45f));
-                DrawCircle(tex, 15.5f, 15.5f, 11f, color);
-                DrawCircle(tex, 11.5f, 19.5f, 3f, Color.Lerp(color, Color.white, 0.5f));
-                return Finish(tex);
-            });
-        }
-
         public static Sprite Arrow()
         {
             return Cached("arrow", () =>
@@ -94,10 +82,11 @@ namespace DessertFactory
             });
         }
 
-        public static Sprite Belt(Color baseColor)
+        public static Sprite Belt()
         {
-            return Cached("belt" + baseColor, () =>
+            return Cached("belt", () =>
             {
+                var baseColor = new Color(0.35f, 0.33f, 0.32f);
                 var tex = NewTexture(Size);
                 var light = Color.Lerp(baseColor, Color.white, 0.35f);
                 var edge = Color.Lerp(baseColor, Color.black, 0.4f);
@@ -117,51 +106,6 @@ namespace DessertFactory
                         tex.SetPixel(x, y, chevron ? light : baseColor);
                     }
                 }
-                return Finish(tex);
-            });
-        }
-
-        public static Sprite Girl(Color outfit, Color hair)
-        {
-            return Cached("girl" + outfit + hair, () =>
-            {
-                var tex = NewTexture(Size);
-                var skin = new Color(1f, 0.87f, 0.77f);
-                var floor = Color.Lerp(outfit, Color.black, 0.55f);
-                floor.a = 0.6f;
-
-                // work spot
-                DrawRect(tex, 1, 1, 30, 30, floor);
-
-                // dress
-                for (int y = 3; y < 13; y++)
-                {
-                    int halfWidth = 4 + (13 - y) / 2;
-                    for (int x = 16 - halfWidth; x < 16 + halfWidth; x++)
-                        tex.SetPixel(x, y, outfit);
-                }
-
-                // twin tails, hair, then face on top leaving the bangs
-                DrawCircle(tex, 6.5f, 16f, 3.5f, hair);
-                DrawCircle(tex, 25.5f, 16f, 3.5f, hair);
-                DrawCircle(tex, 16f, 20f, 8.5f, hair);
-                for (int y = 12; y <= 21; y++)
-                {
-                    for (int x = 9; x < 23; x++)
-                    {
-                        float dx = x - 15.5f;
-                        float dy = y - 18f;
-                        if (dx * dx + dy * dy <= 6.5f * 6.5f)
-                            tex.SetPixel(x, y, skin);
-                    }
-                }
-
-                var eye = new Color(0.15f, 0.1f, 0.25f);
-                DrawRect(tex, 12, 16, 2, 3, eye);
-                DrawRect(tex, 18, 16, 2, 3, eye);
-                tex.SetPixel(15, 13, new Color(0.9f, 0.4f, 0.45f));
-                tex.SetPixel(16, 13, new Color(0.9f, 0.4f, 0.45f));
-
                 return Finish(tex);
             });
         }
@@ -207,13 +151,6 @@ namespace DessertFactory
             for (int i = 0; i < pixels.Length; i++)
                 pixels[i] = color;
             tex.SetPixels(pixels);
-        }
-
-        static void DrawRect(Texture2D tex, int x, int y, int w, int h, Color color)
-        {
-            for (int py = y; py < y + h; py++)
-                for (int px = x; px < x + w; px++)
-                    tex.SetPixel(px, py, color);
         }
 
         static void DrawCircle(Texture2D tex, float cx, float cy, float r, Color color)

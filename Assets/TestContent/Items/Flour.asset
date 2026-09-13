@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.ItemDef
   displayName: Flour
   color: {r: 0.95, g: 0.92, b: 0.8, a: 1}
-  icon: {fileID: 21300000, guid: a645f2430d987684996f9af1d6d6f73f, type: 3}
+  icon: {fileID: 0}
   isDessert: 0
   sellPrice: 0

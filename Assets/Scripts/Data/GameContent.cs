@@ -56,33 +56,24 @@ namespace DessertFactory
             var belt = content.AddBuilding("Conveyor Belt", BuildingKind.Conveyor, 1,
                 "Moves ingredients along. Drag to lay a line.");
             belt.workTime = 0.6f;
-            belt.outfitColor = new Color(0.35f, 0.33f, 0.32f);
 
             var digger = content.AddBuilding("Digger Girl", BuildingKind.Harvester, 20,
                 "Digs up whatever is buried under her and passes it forward. Place on a deposit.");
             digger.workTime = 1.2f;
             digger.needsDeposit = true;
-            digger.outfitColor = new Color(0.9f, 0.55f, 0.2f);
-            digger.hairColor = new Color(0.35f, 0.2f, 0.1f);
 
             var prep = content.AddBuilding("Prep Girl", BuildingKind.Cook, 35,
                 "Turns raw ingredients into sugar, flour, syrup and dough. Click her to change recipe.");
             prep.recipes = prepRecipes;
-            prep.outfitColor = new Color(0.4f, 0.7f, 0.6f);
-            prep.hairColor = new Color(0.95f, 0.85f, 0.5f);
 
             var pastry = content.AddBuilding("Pastry Girl", BuildingKind.Cook, 60,
                 "Bakes finished desserts. Click her to change recipe.");
             pastry.recipes = pastryRecipes;
             pastry.size = new Vector2Int(2, 2);
-            pastry.outfitColor = new Color(0.95f, 0.6f, 0.75f);
-            pastry.hairColor = new Color(0.55f, 0.35f, 0.8f);
 
             var stall = content.AddBuilding("Dessert Stall", BuildingKind.Stall, 40,
                 "Sells desserts for coins. Anything else sent here is kept in storage.");
             stall.size = new Vector2Int(2, 2);
-            stall.outfitColor = new Color(0.8f, 0.3f, 0.3f);
-            stall.hairColor = new Color(0.15f, 0.15f, 0.2f);
 
             return content;
         }

@@ -59,7 +59,9 @@ namespace DessertFactory
             var body = new GameObject("Body").AddComponent<SpriteRenderer>();
             body.transform.SetParent(transform, false);
             body.transform.localScale = new Vector3(Size.x * cellSize.x, Size.y * cellSize.y, 1f);
-            body.sprite = Def.sprite != null ? Def.sprite : SpriteFactory.Girl(Def.outfitColor, Def.hairColor);
+            body.sprite = Def.sprite != null ? Def.sprite : SpriteFactory.Square();
+            if (Def.sprite == null)
+                body.color = new Color(0.5f, 0.5f, 0.55f);
             body.sortingOrder = 5;
 
             // little marker on the front edge showing where she hands things off

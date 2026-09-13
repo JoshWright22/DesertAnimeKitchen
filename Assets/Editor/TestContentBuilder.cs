@@ -19,10 +19,7 @@ namespace DessertFactory.EditorTools
             var saved = new Dictionary<Object, Object>();
 
             foreach (var item in source.items)
-            {
-                item.icon = SaveSprite(SpriteFactory.ItemIcon(item.color), "Sprites/Items", item.name);
                 saved[item] = Persist(item, "Items");
-            }
 
             foreach (var deposit in source.deposits)
             {
@@ -39,10 +36,6 @@ namespace DessertFactory.EditorTools
 
             foreach (var building in source.buildings)
             {
-                var art = building.kind == BuildingKind.Conveyor
-                    ? SpriteFactory.Belt(building.outfitColor)
-                    : SpriteFactory.Girl(building.outfitColor, building.hairColor);
-                building.sprite = SaveSprite(art, "Sprites/Buildings", building.name);
                 building.recipes = building.recipes.Select(r => Get(saved, r)).ToList();
                 saved[building] = Persist(building, "Buildings");
             }
@@ -152,28 +145,6 @@ namespace DessertFactory.EditorTools
             existing.name = assetName;
             EditorUtility.SetDirty(existing);
             return existing;
-        }
-
-        static Sprite SaveSprite(Sprite sprite, string folder, string fileName)
-        {
-            string dir = $"{Root}/{folder}";
-            EnsureFolder(dir);
-            string path = $"{dir}/{fileName}.png";
-
-            File.WriteAllBytes(path, sprite.texture.EncodeToPNG());
-            AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
-
-            var importer = (TextureImporter)AssetImporter.GetAtPath(path);
-            importer.textureType = TextureImporterType.Sprite;
-            importer.spriteImportMode = SpriteImportMode.Single;
-            importer.spritePixelsPerUnit = sprite.texture.width;
-            importer.filterMode = FilterMode.Point;
-            importer.textureCompression = TextureImporterCompression.Uncompressed;
-            importer.alphaIsTransparency = true;
-            importer.mipmapEnabled = false;
-            importer.SaveAndReimport();
-
-            return AssetDatabase.LoadAssetAtPath<Sprite>(path);
         }
 
         static void EnsureFolder(string path)
