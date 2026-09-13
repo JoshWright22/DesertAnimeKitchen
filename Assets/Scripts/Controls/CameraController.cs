@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace DessertFactory
@@ -10,10 +11,21 @@ namespace DessertFactory
         public float zoomStep = 1.15f;
         public float minZoom = 3f;
         public float maxZoom = 40f;
+        [Tooltip("How far in pixels the mouse has to move before a right click counts as a drag")]
+        public float dragThreshold = 6f;
 
         Camera cam;
         Vector2 mapSize;
-        Vector3 dragOrigin;
+
+        bool dragging;
+        Vector2 pressScreenPos;
+        Vector3 dragWorldOrigin;
+
+        // True while the right button is held and has moved far enough to be a drag
+        public bool IsDragging => dragging;
+
+        // Stays true on the frame the button is released so clicks can tell they were really drags
+        public bool DraggedThisPress { get; private set; }
 
         public void Init(Vector2 size)
         {
@@ -44,20 +56,50 @@ namespace DessertFactory
 
             if (mouse != null)
             {
-                float scroll = mouse.scroll.ReadValue().y;
-                if (scroll != 0f)
-                    ZoomTowards(mouse.position.ReadValue(), scroll > 0 ? 1f / zoomStep : zoomStep);
+                HandleDrag(mouse);
 
-                if (mouse.middleButton.wasPressedThisFrame)
-                    dragOrigin = cam.ScreenToWorldPoint(mouse.position.ReadValue());
-                if (mouse.middleButton.isPressed)
-                {
-                    var now = cam.ScreenToWorldPoint(mouse.position.ReadValue());
-                    transform.position += dragOrigin - now;
-                }
+                float scroll = mouse.scroll.ReadValue().y;
+                if (scroll != 0f && !PointerOverUi())
+                    ZoomTowards(mouse.position.ReadValue(), scroll > 0 ? 1f / zoomStep : zoomStep);
             }
 
             ClampToMap();
+        }
+
+        void HandleDrag(Mouse mouse)
+        {
+            var screenPos = mouse.position.ReadValue();
+
+            if (mouse.rightButton.wasPressedThisFrame)
+            {
+                DraggedThisPress = false;
+                if (!PointerOverUi())
+                {
+                    pressScreenPos = screenPos;
+                    dragWorldOrigin = cam.ScreenToWorldPoint(screenPos);
+                }
+                else
+                {
+                    // started on the UI, don't let this press pan the map
+                    DraggedThisPress = true;
+                }
+            }
+
+            if (mouse.rightButton.isPressed && !DraggedThisPress && Vector2.Distance(screenPos, pressScreenPos) > dragThreshold)
+            {
+                dragging = true;
+                DraggedThisPress = true;
+            }
+
+            if (dragging)
+            {
+                // keep the point we grabbed under the cursor
+                var now = cam.ScreenToWorldPoint(screenPos);
+                transform.position += dragWorldOrigin - now;
+            }
+
+            if (!mouse.rightButton.isPressed)
+                dragging = false;
         }
 
         void ZoomTowards(Vector2 screenPoint, float factor)
@@ -74,6 +116,11 @@ namespace DessertFactory
             pos.x = Mathf.Clamp(pos.x, 0f, mapSize.x);
             pos.y = Mathf.Clamp(pos.y, 0f, mapSize.y);
             transform.position = pos;
+        }
+
+        static bool PointerOverUi()
+        {
+            return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
         }
     }
 }

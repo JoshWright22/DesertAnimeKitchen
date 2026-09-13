@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 
 namespace DessertFactory
 {
@@ -10,6 +12,8 @@ namespace DessertFactory
         [SerializeField] FactoryLayout startingLayout;
         [Tooltip("Uses the DesertMap in the scene if there is one, otherwise makes one")]
         [SerializeField] DesertMap map;
+        [Tooltip("Falls back to Resources/GameHud")]
+        [SerializeField] Hud hudPrefab;
 
         [SerializeField] int mapWidth = 128;
         [SerializeField] int mapHeight = 128;
@@ -48,10 +52,24 @@ namespace DessertFactory
 
             var cam = SetUpCamera(map);
 
-            var hud = gameObject.AddComponent<Hud>();
+            if (hudPrefab == null)
+                hudPrefab = Resources.Load<Hud>("GameHud");
+            var hud = Instantiate(hudPrefab);
+            hud.name = hudPrefab.name;
+            EnsureEventSystem();
+
             var builder = gameObject.AddComponent<BuildController>();
             builder.Init(factory, content, cam, hud);
             hud.Init(factory, content, builder);
+        }
+
+        static void EnsureEventSystem()
+        {
+            if (FindAnyObjectByType<EventSystem>() != null)
+                return;
+
+            var go = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
+            DontDestroyOnLoad(go);
         }
 
         Camera SetUpCamera(DesertMap desert)

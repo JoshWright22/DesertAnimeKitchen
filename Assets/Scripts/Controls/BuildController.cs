@@ -9,6 +9,7 @@ namespace DessertFactory
         GameContent content;
         Camera cam;
         Hud hud;
+        CameraController cameraController;
 
         SpriteRenderer ghost;
         SpriteRenderer ghostArrow;
@@ -27,6 +28,7 @@ namespace DessertFactory
             this.content = content;
             this.cam = cam;
             this.hud = hud;
+            cameraController = cam.GetComponent<CameraController>();
 
             ghost = new GameObject("Build Ghost").AddComponent<SpriteRenderer>();
             ghost.transform.SetParent(transform, false);
@@ -58,7 +60,7 @@ namespace DessertFactory
             HandleHotkeys(keyboard);
 
             var screenPos = mouse.position.ReadValue();
-            PointerOverWorld = !hud.IsOverUi(screenPos);
+            PointerOverWorld = !hud.IsPointerOverUi();
             HoveredCell = factory.Map.WorldToCell(cam.ScreenToWorldPoint(screenPos));
 
             factory.Map.ShowGridLines = gridToggled || Selected != null;
@@ -77,7 +79,8 @@ namespace DessertFactory
                 cook.NextRecipe();
             }
 
-            if (mouse.rightButton.isPressed)
+            // right drag pans the camera, a plain right click removes
+            if (mouse.rightButton.wasReleasedThisFrame && (cameraController == null || !cameraController.DraggedThisPress))
                 factory.Remove(HoveredCell);
         }
 
