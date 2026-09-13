@@ -166,9 +166,17 @@ namespace DessertFactory
             });
         }
 
+        // With domain reload turned off the cache survives between play sessions,
+        // but the sprites in it get destroyed when play mode ends
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void ClearCache()
+        {
+            cache.Clear();
+        }
+
         static Sprite Cached(string key, System.Func<Sprite> create)
         {
-            if (!cache.TryGetValue(key, out var sprite))
+            if (!cache.TryGetValue(key, out var sprite) || sprite == null)
             {
                 sprite = create();
                 cache[key] = sprite;
