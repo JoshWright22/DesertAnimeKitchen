@@ -30,6 +30,35 @@ namespace DessertFactory
             });
         }
 
+        // One cell with lines on the left and bottom, meant for tiled drawing
+        public static Sprite GridCell()
+        {
+            return Cached("gridcell", () =>
+            {
+                var tex = NewTexture(Size);
+                var line = new Color(0.2f, 0.12f, 0.05f, 0.25f);
+                for (int i = 0; i < Size; i++)
+                {
+                    tex.SetPixel(i, 0, line);
+                    tex.SetPixel(0, i, line);
+                }
+                tex.Apply();
+                return Sprite.Create(tex, new Rect(0, 0, Size, Size), new Vector2(0.5f, 0.5f), Size, 0, SpriteMeshType.FullRect);
+            });
+        }
+
+        public static Sprite ItemIcon(Color color)
+        {
+            return Cached("item" + color, () =>
+            {
+                var tex = NewTexture(Size);
+                DrawCircle(tex, 15.5f, 15.5f, 13f, Color.Lerp(color, Color.black, 0.45f));
+                DrawCircle(tex, 15.5f, 15.5f, 11f, color);
+                DrawCircle(tex, 11.5f, 19.5f, 3f, Color.Lerp(color, Color.white, 0.5f));
+                return Finish(tex);
+            });
+        }
+
         public static Sprite Arrow()
         {
             return Cached("arrow", () =>

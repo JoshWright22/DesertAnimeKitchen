@@ -21,11 +21,12 @@ namespace DessertFactory
                 go.transform.SetParent(transform, false);
                 go.transform.localScale = Vector3.one * 0.35f;
                 view = go.AddComponent<SpriteRenderer>();
-                view.sprite = SpriteFactory.Circle();
                 view.sortingOrder = 10;
             }
 
-            view.color = item.color;
+            // icons already have their colors baked in
+            view.sprite = item.icon != null ? item.icon : SpriteFactory.Circle();
+            view.color = item.icon != null ? Color.white : item.color;
             return view;
         }
 

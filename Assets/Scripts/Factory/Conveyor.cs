@@ -22,13 +22,14 @@ namespace DessertFactory
             var body = new GameObject("Belt").AddComponent<SpriteRenderer>();
             body.transform.SetParent(transform, false);
             body.transform.localRotation = Quaternion.Euler(0, 0, Facing.ToAngle());
-            body.sprite = SpriteFactory.Belt(Def.outfitColor);
+            body.transform.localScale = Factory.Map.Grid.cellSize;
+            body.sprite = Def.sprite != null ? Def.sprite : SpriteFactory.Belt(Def.outfitColor);
             body.sortingOrder = 2;
         }
 
-        public override bool TryInsert(ItemDef item, Vector2Int fromTile)
+        public override bool TryInsert(ItemDef item, Vector2Int fromCell)
         {
-            if (fromTile == FrontTile)
+            if (fromCell == OutputCell)
                 return false;
             if (items.Count > 0 && items[items.Count - 1].progress < Spacing)
                 return false;
@@ -37,7 +38,7 @@ namespace DessertFactory
             {
                 item = item,
                 progress = 0f,
-                start = Vector3.Lerp(transform.position, DesertMap.TileToWorld(fromTile), 0.5f),
+                start = Vector3.Lerp(transform.position, Factory.Map.CellToWorld(fromCell), 0.5f),
                 view = Factory.ItemViews.Get(item)
             });
             return true;
@@ -47,7 +48,7 @@ namespace DessertFactory
         {
             float speed = 1f / Mathf.Max(0.05f, Def.workTime);
             var center = transform.position;
-            var end = center + (Vector3)(Vector2)Facing.ToOffset() * 0.5f;
+            var end = Vector3.Lerp(center, Factory.Map.CellToWorld(OutputCell), 0.5f);
 
             for (int i = 0; i < items.Count; i++)
             {

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70fc7061f7464c146b508670c7ebab43, type: 3}
+  m_Name: Dough
+  m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.RecipeDef
+  displayName: Dough
+  inputs:
+  - item: {fileID: 11400000, guid: 4c7dc18ed30deaa4483389c83a8f4609, type: 2}
+    amount: 2
+  - item: {fileID: 11400000, guid: e524fc6e29a779049b6b230339296fff, type: 2}
+    amount: 1
+  outputs:
+  - item: {fileID: 11400000, guid: 01fa1b9f7dfb2e64c8e8d5f13c072d36, type: 2}
+    amount: 1
+  craftTime: 2

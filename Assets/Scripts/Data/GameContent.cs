@@ -74,11 +74,13 @@ namespace DessertFactory
             var pastry = content.AddBuilding("Pastry Girl", BuildingKind.Cook, 60,
                 "Bakes finished desserts. Click her to change recipe.");
             pastry.recipes = pastryRecipes;
+            pastry.size = new Vector2Int(2, 2);
             pastry.outfitColor = new Color(0.95f, 0.6f, 0.75f);
             pastry.hairColor = new Color(0.55f, 0.35f, 0.8f);
 
             var stall = content.AddBuilding("Dessert Stall", BuildingKind.Stall, 40,
                 "Sells desserts for coins. Anything else sent here is kept in storage.");
+            stall.size = new Vector2Int(2, 2);
             stall.outfitColor = new Color(0.8f, 0.3f, 0.3f);
             stall.hairColor = new Color(0.15f, 0.15f, 0.2f);
 

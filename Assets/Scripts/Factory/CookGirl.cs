@@ -23,13 +23,21 @@ namespace DessertFactory
             if (Def.recipes.Count == 0)
                 return;
 
-            ReturnEverything();
-            recipeIndex = (recipeIndex + 1) % Def.recipes.Count;
+            SetRecipe(recipeIndex + 1);
         }
 
-        public override bool TryInsert(ItemDef item, Vector2Int fromTile)
+        public void SetRecipe(int index)
         {
-            if (Recipe == null || fromTile == FrontTile)
+            if (Def.recipes.Count == 0)
+                return;
+
+            ReturnEverything();
+            recipeIndex = (index % Def.recipes.Count + Def.recipes.Count) % Def.recipes.Count;
+        }
+
+        public override bool TryInsert(ItemDef item, Vector2Int fromCell)
+        {
+            if (Recipe == null || fromCell == OutputCell)
                 return false;
 
             int needed = Recipe.InputAmount(item);

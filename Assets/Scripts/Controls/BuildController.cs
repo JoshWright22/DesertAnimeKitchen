@@ -12,10 +12,12 @@ namespace DessertFactory
 
         SpriteRenderer ghost;
         SpriteRenderer ghostArrow;
+        bool gridToggled;
 
         public BuildingDef Selected { get; private set; }
         public Direction Facing { get; private set; } = Direction.Right;
-        public Vector2Int HoveredTile { get; private set; }
+        public Vector2Int HoveredCell { get; private set; }
+        public Vector2Int PlacementOrigin { get; private set; }
         public bool PointerOverWorld { get; private set; }
         public string PlaceError { get; private set; }
 
@@ -31,12 +33,13 @@ namespace DessertFactory
             ghost.sortingOrder = 20;
 
             ghostArrow = new GameObject("Ghost Arrow").AddComponent<SpriteRenderer>();
-            ghostArrow.transform.SetParent(ghost.transform, false);
+            ghostArrow.transform.SetParent(transform, false);
             ghostArrow.transform.localScale = Vector3.one * 0.3f;
             ghostArrow.sprite = SpriteFactory.Arrow();
             ghostArrow.sortingOrder = 21;
 
             ghost.gameObject.SetActive(false);
+            ghostArrow.gameObject.SetActive(false);
         }
 
         public void Select(BuildingDef def)
@@ -56,8 +59,9 @@ namespace DessertFactory
 
             var screenPos = mouse.position.ReadValue();
             PointerOverWorld = !hud.IsOverUi(screenPos);
-            HoveredTile = DesertMap.WorldToTile(cam.ScreenToWorldPoint(screenPos));
+            HoveredCell = factory.Map.WorldToCell(cam.ScreenToWorldPoint(screenPos));
 
+            factory.Map.ShowGridLines = gridToggled || Selected != null;
             UpdateGhost();
 
             if (!PointerOverWorld)
@@ -65,16 +69,16 @@ namespace DessertFactory
 
             if (Selected != null)
             {
-                if (mouse.leftButton.isPressed && factory.GetBuilding(HoveredTile) == null)
-                    factory.Place(Selected, HoveredTile, Facing);
+                if (mouse.leftButton.isPressed && factory.CanPlace(Selected, PlacementOrigin, Facing, out _))
+                    factory.Place(Selected, PlacementOrigin, Facing);
             }
-            else if (mouse.leftButton.wasPressedThisFrame && factory.GetBuilding(HoveredTile) is CookGirl cook)
+            else if (mouse.leftButton.wasPressedThisFrame && factory.GetBuilding(HoveredCell) is CookGirl cook)
             {
                 cook.NextRecipe();
             }
 
             if (mouse.rightButton.isPressed)
-                factory.Remove(HoveredTile);
+                factory.Remove(HoveredCell);
         }
 
         void HandleHotkeys(Keyboard keyboard)
@@ -87,6 +91,9 @@ namespace DessertFactory
 
             if (keyboard.escapeKey.wasPressedThisFrame || keyboard.qKey.wasPressedThisFrame)
                 Select(null);
+
+            if (keyboard.gKey.wasPressedThisFrame)
+                gridToggled = !gridToggled;
 
             if (keyboard.rKey.wasPressedThisFrame)
             {
@@ -102,30 +109,42 @@ namespace DessertFactory
 
             if (Selected.kind == BuildingKind.Conveyor)
             {
-                ghost.sprite = SpriteFactory.Belt(Selected.outfitColor);
+                ghost.sprite = Selected.sprite != null ? Selected.sprite : SpriteFactory.Belt(Selected.outfitColor);
                 ghost.transform.rotation = Quaternion.Euler(0, 0, Facing.ToAngle());
-                ghostArrow.gameObject.SetActive(false);
             }
             else
             {
-                ghost.sprite = SpriteFactory.Girl(Selected.outfitColor, Selected.hairColor);
+                ghost.sprite = Selected.sprite != null ? Selected.sprite : SpriteFactory.Girl(Selected.outfitColor, Selected.hairColor);
                 ghost.transform.rotation = Quaternion.identity;
-                ghostArrow.gameObject.SetActive(true);
-                ghostArrow.transform.localPosition = (Vector3)(Vector2)Facing.ToOffset() * 0.42f;
-                ghostArrow.transform.localRotation = Quaternion.Euler(0, 0, Facing.ToAngle());
             }
+
+            ghostArrow.transform.rotation = Quaternion.Euler(0, 0, Facing.ToAngle());
         }
 
         void UpdateGhost()
         {
             bool show = Selected != null && PointerOverWorld;
             ghost.gameObject.SetActive(show);
+            ghostArrow.gameObject.SetActive(show && Selected.kind != BuildingKind.Conveyor);
             PlaceError = null;
             if (!show)
                 return;
 
-            ghost.transform.position = DesertMap.TileToWorld(HoveredTile);
-            bool ok = factory.CanPlace(Selected, HoveredTile, out string reason);
+            // keep the cursor roughly in the middle of bigger footprints
+            var size = Building.RotatedSize(Selected.size, Facing);
+            PlacementOrigin = HoveredCell - new Vector2Int((size.x - 1) / 2, (size.y - 1) / 2);
+
+            var map = factory.Map;
+            var cellSize = map.Grid.cellSize;
+            ghost.transform.position = map.FootprintCenter(PlacementOrigin, size);
+            ghost.transform.localScale = Selected.kind == BuildingKind.Conveyor
+                ? cellSize
+                : new Vector3(size.x * cellSize.x, size.y * cellSize.y, 1f);
+
+            var output = Building.GetOutputCell(PlacementOrigin, size, Facing);
+            ghostArrow.transform.position = Vector3.Lerp(map.CellToWorld(output - Facing.ToOffset()), map.CellToWorld(output), 0.42f);
+
+            bool ok = factory.CanPlace(Selected, PlacementOrigin, Facing, out string reason);
             PlaceError = reason;
             ghost.color = ok ? new Color(0.6f, 1f, 0.6f, 0.7f) : new Color(1f, 0.4f, 0.4f, 0.6f);
             ghostArrow.color = ghost.color;

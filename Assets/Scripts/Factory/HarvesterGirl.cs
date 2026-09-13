@@ -20,7 +20,7 @@ namespace DessertFactory
                 holding = null;
             }
 
-            if (Factory.Map.GetDeposit(Tile) == null)
+            if (!FindDigCell(out var cell))
             {
                 status = "Nothing left to dig";
                 return;
@@ -31,11 +31,26 @@ namespace DessertFactory
             if (timer >= Def.workTime)
             {
                 timer = 0f;
-                Factory.Map.TryDig(Tile, out holding);
+                Factory.Map.TryDig(cell, out holding);
             }
         }
 
-        public override bool TryInsert(ItemDef item, Vector2Int fromTile)
+        // Bigger diggers work through every cell under them
+        bool FindDigCell(out Vector2Int cell)
+        {
+            foreach (var c in Cells)
+            {
+                if (Factory.Map.GetDeposit(c) != null)
+                {
+                    cell = c;
+                    return true;
+                }
+            }
+            cell = default;
+            return false;
+        }
+
+        public override bool TryInsert(ItemDef item, Vector2Int fromCell)
         {
             return false;
         }
@@ -48,10 +63,9 @@ namespace DessertFactory
 
         public override string GetStatus()
         {
-            var deposit = Factory.Map.GetDeposit(Tile);
-            if (deposit == null)
+            if (!FindDigCell(out var cell))
                 return status;
-            return $"{status} ({deposit.item.displayName}, {Factory.Map.GetAmount(Tile)} left)";
+            return $"{status} ({Factory.Map.GetDeposit(cell).item.displayName}, {Factory.Map.GetAmount(cell)} left here)";
         }
     }
 }

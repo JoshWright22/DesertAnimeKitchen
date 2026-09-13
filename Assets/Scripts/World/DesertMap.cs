@@ -1,27 +1,47 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace DessertFactory
 {
+    // Owns the grid: ground and deposit tilemaps plus cell <-> world conversion
+    [RequireComponent(typeof(Grid))]
     public class DesertMap : MonoBehaviour
     {
+        [SerializeField] Tilemap groundLayer;
+        [SerializeField] Tilemap depositLayer;
+        [Tooltip("Sprite used for every ground/deposit tile. Tinted per cell. Leave empty for a plain square.")]
+        [SerializeField] Sprite tileSprite;
+
         public int Width { get; private set; }
         public int Height { get; private set; }
+        public Grid Grid { get; private set; }
 
-        List<DepositDef> depositTypes;
+        readonly List<DepositDef> depositTypes = new List<DepositDef>();
         int[] depositIndex;
         int[] depositAmount;
-        Texture2D groundTexture;
         Color[] sandColors;
+        Tile tile;
+        SpriteRenderer gridLines;
 
-        public void Generate(int width, int height, List<DepositDef> deposits, int seed)
+        public bool ShowGridLines
+        {
+            get => gridLines != null && gridLines.enabled;
+            set { if (gridLines != null) gridLines.enabled = value; }
+        }
+
+        public void Generate(int width, int height, List<DepositDef> deposits, int seed, bool scatterDeposits)
         {
             Width = width;
             Height = height;
-            depositTypes = deposits;
+            Grid = GetComponent<Grid>();
+            depositTypes.Clear();
+            depositTypes.AddRange(deposits);
             depositIndex = new int[width * height];
             depositAmount = new int[width * height];
             sandColors = new Color[width * height];
+
+            SetUpLayers();
 
             var rng = new System.Random(seed);
             float noiseOffset = rng.Next(0, 10000);
@@ -40,21 +60,47 @@ namespace DessertFactory
                 }
             }
 
-            var center = new Vector2(width / 2f, height / 2f);
-            for (int d = 0; d < deposits.Count; d++)
+            if (scatterDeposits)
             {
-                for (int p = 0; p < deposits[d].patchCount; p++)
+                var center = new Vector2(width / 2f, height / 2f);
+                for (int d = 0; d < deposits.Count; d++)
                 {
-                    // first patch of every type lands near the middle so the start is always playable
-                    float spread = p == 0 ? 14f : Mathf.Min(width, height) * 0.45f;
-                    var patchCenter = center + new Vector2(
-                        (float)(rng.NextDouble() * 2 - 1) * spread,
-                        (float)(rng.NextDouble() * 2 - 1) * spread);
-                    PaintPatch(d, patchCenter, deposits[d], noiseOffset + d * 31.7f + p * 7.3f);
+                    for (int p = 0; p < deposits[d].patchCount; p++)
+                    {
+                        // first patch of every type lands near the middle so the start is always playable
+                        float spread = p == 0 ? 14f : Mathf.Min(width, height) * 0.45f;
+                        var patchCenter = center + new Vector2(
+                            (float)(rng.NextDouble() * 2 - 1) * spread,
+                            (float)(rng.NextDouble() * 2 - 1) * spread);
+                        PaintPatch(d, patchCenter, deposits[d], noiseOffset + d * 31.7f + p * 7.3f);
+                    }
                 }
             }
 
-            BuildGroundSprite();
+            DrawGround();
+            DrawAllDeposits();
+            CreateGridLines();
+        }
+
+        void SetUpLayers()
+        {
+            if (groundLayer == null)
+                groundLayer = CreateLayer("Ground", -10);
+            if (depositLayer == null)
+                depositLayer = CreateLayer("Deposits", -9);
+
+            tile = ScriptableObject.CreateInstance<Tile>();
+            tile.sprite = tileSprite != null ? tileSprite : SpriteFactory.Square();
+            tile.flags = TileFlags.None;
+        }
+
+        Tilemap CreateLayer(string layerName, int sortingOrder)
+        {
+            var go = new GameObject(layerName);
+            go.transform.SetParent(transform, false);
+            var tilemap = go.AddComponent<Tilemap>();
+            go.AddComponent<TilemapRenderer>().sortingOrder = sortingOrder;
+            return tilemap;
         }
 
         void PaintPatch(int type, Vector2 patchCenter, DepositDef deposit, float noiseSeed)
@@ -82,86 +128,138 @@ namespace DessertFactory
             }
         }
 
-        void BuildGroundSprite()
+        // Used by hand made layouts to put a deposit exactly where they want it
+        public void PaintDeposit(DepositDef deposit, RectInt area)
         {
-            groundTexture = new Texture2D(Width, Height, TextureFormat.RGBA32, false)
+            int type = depositTypes.IndexOf(deposit);
+            if (type < 0)
             {
-                filterMode = FilterMode.Point,
-                wrapMode = TextureWrapMode.Clamp
-            };
+                depositTypes.Add(deposit);
+                type = depositTypes.Count - 1;
+            }
 
-            var pixels = new Color[Width * Height];
-            for (int i = 0; i < pixels.Length; i++)
-                pixels[i] = TileColor(i);
-            groundTexture.SetPixels(pixels);
-            groundTexture.Apply();
-
-            var sr = gameObject.AddComponent<SpriteRenderer>();
-            sr.sprite = Sprite.Create(groundTexture, new Rect(0, 0, Width, Height), Vector2.zero, 1f);
-            sr.sortingOrder = -10;
-
-            // tile (x, y) is centered on world (x, y)
-            transform.position = new Vector3(-0.5f, -0.5f, 0f);
+            foreach (var pos in area.allPositionsWithin)
+            {
+                if (!InBounds(pos))
+                    continue;
+                int i = pos.y * Width + pos.x;
+                depositIndex[i] = type;
+                depositAmount[i] = deposit.amountPerTile;
+                RefreshDepositCell(pos);
+            }
         }
 
-        Color TileColor(int i)
+        void DrawGround()
         {
+            groundLayer.ClearAllTiles();
+            var tiles = new TileBase[Width * Height];
+            for (int i = 0; i < tiles.Length; i++)
+                tiles[i] = tile;
+            groundLayer.SetTilesBlock(new BoundsInt(0, 0, 0, Width, Height, 1), tiles);
+
+            for (int y = 0; y < Height; y++)
+                for (int x = 0; x < Width; x++)
+                    groundLayer.SetColor(new Vector3Int(x, y, 0), sandColors[y * Width + x]);
+        }
+
+        void DrawAllDeposits()
+        {
+            depositLayer.ClearAllTiles();
+            for (int y = 0; y < Height; y++)
+                for (int x = 0; x < Width; x++)
+                    RefreshDepositCell(new Vector2Int(x, y));
+        }
+
+        void RefreshDepositCell(Vector2Int cell)
+        {
+            var pos = new Vector3Int(cell.x, cell.y, 0);
+            int i = cell.y * Width + cell.x;
             if (depositIndex[i] < 0)
-                return sandColors[i];
+            {
+                depositLayer.SetTile(pos, null);
+                return;
+            }
 
             // speckle the deposit a bit so it reads as stuff in the sand
             var color = depositTypes[depositIndex[i]].groundColor;
-            int x = i % Width;
-            int y = i / Width;
-            return (x * 7 + y * 13) % 5 == 0 ? Color.Lerp(color, sandColors[i], 0.5f) : color;
+            if ((cell.x * 7 + cell.y * 13) % 5 == 0)
+                color = Color.Lerp(color, sandColors[i], 0.5f);
+
+            depositLayer.SetTile(pos, tile);
+            depositLayer.SetColor(pos, color);
         }
 
-        public bool InBounds(Vector2Int tile)
+        void CreateGridLines()
         {
-            return tile.x >= 0 && tile.y >= 0 && tile.x < Width && tile.y < Height;
+            if (gridLines == null)
+            {
+                gridLines = new GameObject("Grid Lines").AddComponent<SpriteRenderer>();
+                gridLines.transform.SetParent(transform, false);
+                gridLines.sprite = SpriteFactory.GridCell();
+                gridLines.drawMode = SpriteDrawMode.Tiled;
+                gridLines.sortingOrder = -5;
+            }
+
+            var cellSize = (Vector2)Grid.cellSize;
+            gridLines.size = new Vector2(Width, Height);
+            gridLines.transform.localScale = new Vector3(cellSize.x, cellSize.y, 1f);
+            gridLines.transform.localPosition = new Vector3(Width * cellSize.x / 2f, Height * cellSize.y / 2f, 0f);
+            gridLines.enabled = false;
         }
 
-        public DepositDef GetDeposit(Vector2Int tile)
+        public bool InBounds(Vector2Int cell)
         {
-            if (!InBounds(tile))
+            return cell.x >= 0 && cell.y >= 0 && cell.x < Width && cell.y < Height;
+        }
+
+        public DepositDef GetDeposit(Vector2Int cell)
+        {
+            if (!InBounds(cell))
                 return null;
-            int index = depositIndex[tile.y * Width + tile.x];
+            int index = depositIndex[cell.y * Width + cell.x];
             return index < 0 ? null : depositTypes[index];
         }
 
-        public int GetAmount(Vector2Int tile)
+        public int GetAmount(Vector2Int cell)
         {
-            return InBounds(tile) ? depositAmount[tile.y * Width + tile.x] : 0;
+            return InBounds(cell) ? depositAmount[cell.y * Width + cell.x] : 0;
         }
 
-        public bool TryDig(Vector2Int tile, out ItemDef item)
+        public bool TryDig(Vector2Int cell, out ItemDef item)
         {
             item = null;
-            var deposit = GetDeposit(tile);
+            var deposit = GetDeposit(cell);
             if (deposit == null)
                 return false;
 
-            int i = tile.y * Width + tile.x;
+            int i = cell.y * Width + cell.x;
             item = deposit.item;
             depositAmount[i]--;
 
             if (depositAmount[i] <= 0)
             {
                 depositIndex[i] = -1;
-                groundTexture.SetPixel(tile.x, tile.y, sandColors[i]);
-                groundTexture.Apply();
+                RefreshDepositCell(cell);
             }
             return true;
         }
 
-        public static Vector2Int WorldToTile(Vector3 world)
+        public Vector2Int WorldToCell(Vector3 world)
         {
-            return new Vector2Int(Mathf.RoundToInt(world.x), Mathf.RoundToInt(world.y));
+            var cell = Grid.WorldToCell(world);
+            return new Vector2Int(cell.x, cell.y);
         }
 
-        public static Vector3 TileToWorld(Vector2Int tile)
+        public Vector3 CellToWorld(Vector2Int cell)
         {
-            return new Vector3(tile.x, tile.y, 0f);
+            return Grid.GetCellCenterWorld(new Vector3Int(cell.x, cell.y, 0));
         }
+
+        public Vector3 FootprintCenter(Vector2Int origin, Vector2Int size)
+        {
+            return Vector3.Lerp(CellToWorld(origin), CellToWorld(origin + size - Vector2Int.one), 0.5f);
+        }
+
+        public Vector2 WorldSize => new Vector2(Width * Grid.cellSize.x, Height * Grid.cellSize.y);
     }
 }

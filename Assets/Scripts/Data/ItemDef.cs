@@ -7,6 +7,8 @@ namespace DessertFactory
     {
         public string displayName;
         public Color color = Color.white;
+        [Tooltip("Optional, a tinted dot is drawn if empty")]
+        public Sprite icon;
 
         // Desserts get sold when they reach a stall, everything else just goes into storage
         public bool isDessert;

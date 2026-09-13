@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be2d7244aafe9594f9008eb0dfd4890e, type: 3}
+  m_Name: Prep Girl
+  m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.BuildingDef
+  displayName: Prep Girl
+  description: Turns raw ingredients into sugar, flour, syrup and dough. Click her
+    to change recipe.
+  kind: 2
+  price: 35
+  size: {x: 1, y: 1}
+  sprite: {fileID: 21300000, guid: 07b4026e6b489694e8fd091f21448efa, type: 3}
+  outfitColor: {r: 0.4, g: 0.7, b: 0.6, a: 1}
+  hairColor: {r: 0.95, g: 0.85, b: 0.5, a: 1}
+  workTime: 1
+  needsDeposit: 0
+  recipes:
+  - {fileID: 11400000, guid: 21bd26b053e50664193f908f8724dd03, type: 2}
+  - {fileID: 11400000, guid: 2afc703765411114a8666459610c8fe1, type: 2}
+  - {fileID: 11400000, guid: 479290d0efe73a44a943dacd8be45798, type: 2}
+  - {fileID: 11400000, guid: 8b32449d51ec4014d9d3398d51e45cde, type: 2}

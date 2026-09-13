@@ -6,7 +6,7 @@ namespace DessertFactory
     {
         int sold;
 
-        public override bool TryInsert(ItemDef item, Vector2Int fromTile)
+        public override bool TryInsert(ItemDef item, Vector2Int fromCell)
         {
             if (item.isDessert)
             {

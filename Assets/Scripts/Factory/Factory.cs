@@ -9,7 +9,8 @@ namespace DessertFactory
         public Stockpile Stockpile { get; private set; }
         public ItemViewPool ItemViews { get; private set; }
 
-        readonly Dictionary<Vector2Int, Building> buildings = new Dictionary<Vector2Int, Building>();
+        // every cell a building covers points back at it
+        readonly Dictionary<Vector2Int, Building> occupied = new Dictionary<Vector2Int, Building>();
         readonly List<Building> tickOrder = new List<Building>();
 
         public void Init(DesertMap map, Stockpile stockpile)
@@ -27,32 +28,53 @@ namespace DessertFactory
                 tickOrder[i].Tick(dt);
         }
 
-        public Building GetBuilding(Vector2Int tile)
+        public Building GetBuilding(Vector2Int cell)
         {
-            buildings.TryGetValue(tile, out var building);
+            occupied.TryGetValue(cell, out var building);
             return building;
         }
 
-        public bool CanPlace(BuildingDef def, Vector2Int tile, out string reason)
+        public bool CanPlace(BuildingDef def, Vector2Int origin, Direction facing, out string reason, bool free = false)
         {
             reason = null;
-            if (!Map.InBounds(tile))
-                reason = "Out of bounds";
-            else if (buildings.ContainsKey(tile))
-                reason = "Something is already here";
-            else if (def.needsDeposit && Map.GetDeposit(tile) == null)
+            var size = Building.RotatedSize(def.size, facing);
+            bool onDeposit = false;
+
+            for (int y = 0; y < size.y && reason == null; y++)
+            {
+                for (int x = 0; x < size.x; x++)
+                {
+                    var cell = new Vector2Int(origin.x + x, origin.y + y);
+                    if (!Map.InBounds(cell))
+                    {
+                        reason = "Out of bounds";
+                        break;
+                    }
+                    if (occupied.ContainsKey(cell))
+                    {
+                        reason = "Something is in the way";
+                        break;
+                    }
+                    if (Map.GetDeposit(cell) != null)
+                        onDeposit = true;
+                }
+            }
+
+            if (reason == null && def.needsDeposit && !onDeposit)
                 reason = "Needs to go on a deposit";
-            else if (Stockpile.Coins < def.price)
+            if (reason == null && !free && Stockpile.Coins < def.price)
                 reason = "Not enough coins";
             return reason == null;
         }
 
-        public Building Place(BuildingDef def, Vector2Int tile, Direction facing)
+        public Building Place(BuildingDef def, Vector2Int origin, Direction facing, bool free = false)
         {
-            if (!CanPlace(def, tile, out _) || !Stockpile.TrySpend(def.price))
+            if (!CanPlace(def, origin, facing, out _, free))
+                return null;
+            if (!free && !Stockpile.TrySpend(def.price))
                 return null;
 
-            var go = new GameObject($"{def.displayName} {tile}");
+            var go = new GameObject($"{def.displayName} {origin}");
             go.transform.SetParent(transform, false);
 
             Building building;
@@ -64,19 +86,22 @@ namespace DessertFactory
                 default: building = go.AddComponent<DessertStall>(); break;
             }
 
-            building.Init(this, def, tile, facing);
-            buildings[tile] = building;
+            building.Init(this, def, origin, facing);
+            foreach (var cell in building.Cells)
+                occupied[cell] = building;
             tickOrder.Add(building);
             return building;
         }
 
-        public void Remove(Vector2Int tile)
+        public void Remove(Vector2Int cell)
         {
-            if (!buildings.TryGetValue(tile, out var building))
+            var building = GetBuilding(cell);
+            if (building == null)
                 return;
 
             building.OnRemoved();
-            buildings.Remove(tile);
+            foreach (var c in building.Cells)
+                occupied.Remove(c);
             tickOrder.Remove(building);
             Stockpile.AddCoins(building.Def.price);
             Destroy(building.gameObject);

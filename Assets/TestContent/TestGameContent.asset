@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a17d1f717c594aa4ba78734071aa55e1, type: 3}
+  m_Name: TestGameContent
+  m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.GameContent
+  items:
+  - {fileID: 11400000, guid: 4ab4d173e12b3aa4f90d9a660fbf2a72, type: 2}
+  - {fileID: 11400000, guid: d2465807bbafb0940b447a9a314a16b9, type: 2}
+  - {fileID: 11400000, guid: 6326cd13653382b4a888a8a005dd6f42, type: 2}
+  - {fileID: 11400000, guid: 8d9b1378c3ea08d41b5f5f0658ab6320, type: 2}
+  - {fileID: 11400000, guid: e524fc6e29a779049b6b230339296fff, type: 2}
+  - {fileID: 11400000, guid: f9770b0a042bce445ba9f8e926724f8e, type: 2}
+  - {fileID: 11400000, guid: 4c7dc18ed30deaa4483389c83a8f4609, type: 2}
+  - {fileID: 11400000, guid: ffb73109ce872674299b9e0889a18dd3, type: 2}
+  - {fileID: 11400000, guid: 01fa1b9f7dfb2e64c8e8d5f13c072d36, type: 2}
+  - {fileID: 11400000, guid: a9fbe6f564332c04baabbe61929d0238, type: 2}
+  - {fileID: 11400000, guid: c40b15f5858c8ad42b7227f1d2f072f6, type: 2}
+  - {fileID: 11400000, guid: e6cbac46bf54ed1499871f5ede4c809b, type: 2}
+  deposits:
+  - {fileID: 11400000, guid: 79dea5e813e6fa442a584be5aeb74a60, type: 2}
+  - {fileID: 11400000, guid: de023cfe586b2d441915651864608c1e, type: 2}
+  - {fileID: 11400000, guid: 7f31605e7fd3b8e4d8aeaf98ea18fba1, type: 2}
+  - {fileID: 11400000, guid: 0c86e752363d9fe43b429951ecf00e48, type: 2}
+  - {fileID: 11400000, guid: 6df9fe5e953083f4193dd06ca584b24b, type: 2}
+  recipes:
+  - {fileID: 11400000, guid: 21bd26b053e50664193f908f8724dd03, type: 2}
+  - {fileID: 11400000, guid: 2afc703765411114a8666459610c8fe1, type: 2}
+  - {fileID: 11400000, guid: 479290d0efe73a44a943dacd8be45798, type: 2}
+  - {fileID: 11400000, guid: 8b32449d51ec4014d9d3398d51e45cde, type: 2}
+  - {fileID: 11400000, guid: 593707d02bab44143a68ac1842f9db73, type: 2}
+  - {fileID: 11400000, guid: a96d8a53c359bac4ba40b66c8211ec2a, type: 2}
+  - {fileID: 11400000, guid: 730f01e75059ae2469986981d6759168, type: 2}
+  buildings:
+  - {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+  - {fileID: 11400000, guid: 11d5816eca767464abdb0e410b501b2b, type: 2}
+  - {fileID: 11400000, guid: 2d7d9fb4705065d46829be0cc506c023, type: 2}
+  - {fileID: 11400000, guid: b19c6f81cdbeff04b8775a6ea288a045, type: 2}
+  - {fileID: 11400000, guid: 0e6dbbd0d0128d24dbef39c871873ecb, type: 2}

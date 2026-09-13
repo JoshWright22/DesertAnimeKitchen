@@ -97,7 +97,7 @@ namespace DessertFactory
             if (!builder.PointerOverWorld)
                 return;
 
-            var tile = builder.HoveredTile;
+            var cell = builder.HoveredCell;
             var lines = new List<string>();
 
             if (builder.Selected != null)
@@ -108,7 +108,7 @@ namespace DessertFactory
                     lines.Add($"<color=#ff8080>{builder.PlaceError}</color>");
             }
 
-            var building = factory.GetBuilding(tile);
+            var building = factory.GetBuilding(cell);
             if (building != null)
             {
                 lines.Add($"<b>{building.Def.displayName}</b>");
@@ -116,9 +116,9 @@ namespace DessertFactory
             }
             else
             {
-                var deposit = factory.Map.GetDeposit(tile);
+                var deposit = factory.Map.GetDeposit(cell);
                 if (deposit != null)
-                    lines.Add($"{deposit.item.displayName} deposit ({factory.Map.GetAmount(tile)})");
+                    lines.Add($"{deposit.item.displayName} deposit ({factory.Map.GetAmount(cell)})");
             }
 
             if (lines.Count == 0)
@@ -134,7 +134,7 @@ namespace DessertFactory
 
         void DrawHelp()
         {
-            var rect = showHelp ? new Rect(10, Screen.height - 170, 250, 150) : new Rect(10, Screen.height - 40, 80, 30);
+            var rect = showHelp ? new Rect(10, Screen.height - 190, 250, 170) : new Rect(10, Screen.height - 40, 80, 30);
             Panel(rect);
 
             if (!showHelp)
@@ -149,6 +149,7 @@ namespace DessertFactory
                 "WASD / MMB drag - move camera\n" +
                 "Scroll - zoom\n" +
                 "1-9 - pick building, R - rotate\n" +
+                "G - toggle grid lines\n" +
                 "LMB - build (hold to drag)\n" +
                 "RMB - remove\n" +
                 "Click a cook girl to swap recipe\n" +
