@@ -11,11 +11,15 @@ namespace DessertFactory.EditorTools
     public static class TestContentBuilder
     {
         const string Root = "Assets/TestContent";
+        const string BuildingPrefabs = "Assets/Prefabs/Buildings";
 
         [MenuItem("Dessert Factory/Build Test Content")]
         public static void Build()
         {
-            var source = GameContent.CreateDefault();
+            var prefabs = AssetDatabase.FindAssets("t:Prefab", new[] { BuildingPrefabs })
+                .Select(guid => AssetDatabase.LoadAssetAtPath<Building>(AssetDatabase.GUIDToAssetPath(guid)))
+                .Where(b => b != null);
+            var source = GameContent.CreateDefault(prefabs);
             var saved = new Dictionary<Object, Object>();
 
             foreach (var item in source.items)

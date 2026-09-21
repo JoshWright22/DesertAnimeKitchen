@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Miner Girl
   m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.BuildingDef
   displayName: Miner Girl
-  description: Mines whatever is buried under her and passes it forward. Place
-    on a deposit.
-  kind: 1
+  description: Mines whatever is buried under her and passes it forward. Place on
+    a deposit.
+  prefab: {fileID: 693591305789761005, guid: 6c08f6fbaa5c57640993f283d0f40b7b, type: 3}
   price: 20
   size: {x: 1, y: 1}
   sprite: {fileID: 0}

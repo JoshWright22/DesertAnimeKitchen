@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.BuildingDef
   displayName: Conveyor Belt
   description: Moves ingredients along. Drag to lay a line.
-  kind: 0
+  prefab: {fileID: 682681267286281929, guid: 9109544d7c2ae02448d0a7e24bb0865f, type: 3}
   price: 1
   size: {x: 1, y: 1}
   sprite: {fileID: 0}

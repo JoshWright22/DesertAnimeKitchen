@@ -5,12 +5,21 @@ namespace DessertFactory
 {
     public abstract class Building : MonoBehaviour
     {
+        [SerializeField] SpriteRenderer body;
+        [Tooltip("Marker on the front edge showing where she hands things off. Leave empty if there's no front.")]
+        [SerializeField] SpriteRenderer outputArrow;
+        [Tooltip("Rotate the body to match the way it was placed, like belts")]
+        [SerializeField] bool turnBody;
+
         public BuildingDef Def { get; private set; }
         public Vector2Int Origin { get; private set; }
         public Vector2Int Size { get; private set; }
         public Direction Facing { get; private set; }
 
         protected Factory Factory { get; private set; }
+
+        public bool TurnsBody => turnBody;
+        public bool HasOutputArrow => outputArrow != null;
 
         // The cell just past our front edge, where finished items get handed off
         public Vector2Int OutputCell => GetOutputCell(Origin, Size, Facing);
@@ -49,31 +58,39 @@ namespace DessertFactory
             Facing = facing;
             Size = RotatedSize(def.size, facing);
             transform.position = factory.Map.FootprintCenter(origin, Size);
-            BuildVisuals();
+
+            body.sprite = SpriteFor(def);
+            if (body.sprite == null)
+                ShowPlaceholder(body);
+            if (turnBody)
+                body.transform.localRotation = Quaternion.Euler(0, 0, facing.ToAngle());
+            body.transform.localScale = FitScale(body.sprite, turnBody ? def.size : Size, factory.Map.Grid.cellSize);
+
+            if (outputArrow != null)
+            {
+                if (outputArrow.sprite == null)
+                    outputArrow.sprite = SpriteFactory.Arrow();
+                var lastCell = factory.Map.CellToWorld(OutputCell - facing.ToOffset());
+                outputArrow.transform.position = Vector3.Lerp(lastCell, factory.Map.CellToWorld(OutputCell), 0.42f);
+                outputArrow.transform.rotation = Quaternion.Euler(0, 0, facing.ToAngle());
+            }
         }
 
-        protected virtual void BuildVisuals()
+        public Sprite SpriteFor(BuildingDef def) => def.sprite != null ? def.sprite : body.sprite;
+
+        // Only used until the building has real art
+        public virtual void ShowPlaceholder(SpriteRenderer target)
         {
-            var cellSize = Factory.Map.Grid.cellSize;
+            target.sprite = SpriteFactory.Square();
+            target.color = new Color(0.5f, 0.5f, 0.55f);
+        }
 
-            var body = new GameObject("Body").AddComponent<SpriteRenderer>();
-            body.transform.SetParent(transform, false);
-            body.transform.localScale = new Vector3(Size.x * cellSize.x, Size.y * cellSize.y, 1f);
-            body.sprite = Def.sprite != null ? Def.sprite : SpriteFactory.Square();
-            if (Def.sprite == null)
-                body.color = new Color(0.5f, 0.5f, 0.55f);
-            body.sortingOrder = 5;
-
-            // little marker on the front edge showing where she hands things off
-            var lastCell = Factory.Map.CellToWorld(OutputCell - Facing.ToOffset());
-            var arrow = new GameObject("Output").AddComponent<SpriteRenderer>();
-            arrow.transform.SetParent(transform, false);
-            arrow.transform.position = Vector3.Lerp(lastCell, Factory.Map.CellToWorld(OutputCell), 0.42f);
-            arrow.transform.rotation = Quaternion.Euler(0, 0, Facing.ToAngle());
-            arrow.transform.localScale = Vector3.one * 0.3f;
-            arrow.sprite = SpriteFactory.Arrow();
-            arrow.color = new Color(1f, 1f, 1f, 0.8f);
-            arrow.sortingOrder = 6;
+        // Sizes the sprite to the footprint without squashing it, whatever resolution the art is
+        public static Vector3 FitScale(Sprite sprite, Vector2Int cells, Vector3 cellSize)
+        {
+            var spriteSize = sprite.bounds.size;
+            float scale = Mathf.Min(cells.x * cellSize.x / spriteSize.x, cells.y * cellSize.y / spriteSize.y);
+            return new Vector3(scale, scale, 1f);
         }
 
         public virtual void Tick(float deltaTime)

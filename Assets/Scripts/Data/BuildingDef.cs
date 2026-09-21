@@ -3,26 +3,18 @@ using UnityEngine;
 
 namespace DessertFactory
 {
-    public enum BuildingKind
-    {
-        Conveyor,
-        Miner,
-        Cook,
-        Stall
-    }
-
     [CreateAssetMenu(menuName = "Dessert Factory/Building")]
     public class BuildingDef : ScriptableObject
     {
         public string displayName;
         [TextArea] public string description;
-        public BuildingKind kind;
+        public Building prefab;
         public int price = 10;
         [Tooltip("Footprint in cells when facing up")]
         public Vector2Int size = Vector2Int.one;
 
         [Header("Look")]
-        [Tooltip("A plain placeholder is shown if empty")]
+        [Tooltip("Swaps out the prefab's sprite, so two buildings can share one prefab and still look different")]
         public Sprite sprite;
 
         [Header("Work")]

@@ -17,14 +17,9 @@ namespace DessertFactory
 
         readonly List<BeltItem> items = new List<BeltItem>();
 
-        protected override void BuildVisuals()
+        public override void ShowPlaceholder(SpriteRenderer target)
         {
-            var body = new GameObject("Belt").AddComponent<SpriteRenderer>();
-            body.transform.SetParent(transform, false);
-            body.transform.localRotation = Quaternion.Euler(0, 0, Facing.ToAngle());
-            body.transform.localScale = Factory.Map.Grid.cellSize;
-            body.sprite = Def.sprite != null ? Def.sprite : SpriteFactory.Belt();
-            body.sortingOrder = 2;
+            target.sprite = SpriteFactory.Belt();
         }
 
         public override bool TryInsert(ItemDef item, Vector2Int fromCell)

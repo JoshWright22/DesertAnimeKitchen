@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace DessertFactory
@@ -13,9 +14,11 @@ namespace DessertFactory
 
         // Placeholder content so the game runs without any assets set up.
         // Once real assets exist, make a GameContent asset and assign it on GameBootstrap.
-        public static GameContent CreateDefault()
+        // Needs one prefab of each kind of building to hand out.
+        public static GameContent CreateDefault(IEnumerable<Building> prefabs)
         {
             var content = CreateInstance<GameContent>();
+            T Prefab<T>() where T : Building => prefabs.OfType<T>().FirstOrDefault();
 
             var sugarSand = content.AddItem("Sugar Sand", new Color(0.98f, 0.95f, 0.85f));
             var dates = content.AddItem("Dates", new Color(0.45f, 0.25f, 0.12f));
@@ -53,25 +56,25 @@ namespace DessertFactory
                 content.AddRecipe("Date Cake", 5f, new[] { Amount(dough, 1), Amount(dates, 2), Amount(sugar, 1) }, new[] { Amount(dateCake, 1) }),
             };
 
-            var belt = content.AddBuilding("Conveyor Belt", BuildingKind.Conveyor, 1,
+            var belt = content.AddBuilding("Conveyor Belt", Prefab<Conveyor>(), 1,
                 "Moves ingredients along. Drag to lay a line.");
             belt.workTime = 0.6f;
 
-            var miner = content.AddBuilding("Miner Girl", BuildingKind.Miner, 20,
+            var miner = content.AddBuilding("Miner Girl", Prefab<MinerGirl>(), 20,
                 "Mines whatever is buried under her and passes it forward. Place on a deposit.");
             miner.workTime = 1.2f;
             miner.needsDeposit = true;
 
-            var prep = content.AddBuilding("Prep Girl", BuildingKind.Cook, 35,
+            var prep = content.AddBuilding("Prep Girl", Prefab<CookGirl>(), 35,
                 "Turns raw ingredients into sugar, flour, syrup and dough. Click her to change recipe.");
             prep.recipes = prepRecipes;
 
-            var pastry = content.AddBuilding("Pastry Girl", BuildingKind.Cook, 60,
+            var pastry = content.AddBuilding("Pastry Girl", Prefab<CookGirl>(), 60,
                 "Bakes finished desserts. Click her to change recipe.");
             pastry.recipes = pastryRecipes;
             pastry.size = new Vector2Int(2, 2);
 
-            var stall = content.AddBuilding("Dessert Stall", BuildingKind.Stall, 40,
+            var stall = content.AddBuilding("Dessert Stall", Prefab<DessertStall>(), 40,
                 "Sells desserts for coins. Anything else sent here is kept in storage.");
             stall.size = new Vector2Int(2, 2);
 
@@ -117,12 +120,12 @@ namespace DessertFactory
             return recipe;
         }
 
-        BuildingDef AddBuilding(string name, BuildingKind kind, int price, string description)
+        BuildingDef AddBuilding(string name, Building prefab, int price, string description)
         {
             var building = CreateInstance<BuildingDef>();
             building.name = name;
             building.displayName = name;
-            building.kind = kind;
+            building.prefab = prefab;
             building.price = price;
             building.description = description;
             buildings.Add(building);

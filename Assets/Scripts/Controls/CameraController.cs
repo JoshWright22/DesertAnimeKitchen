@@ -7,6 +7,8 @@ namespace DessertFactory
     [RequireComponent(typeof(Camera))]
     public class CameraController : MonoBehaviour
     {
+        [SerializeField] DesertMap map;
+
         public float panSpeed = 1.2f;
         public float zoomStep = 1.15f;
         public float minZoom = 3f;
@@ -16,8 +18,6 @@ namespace DessertFactory
         public float dragThreshold = 6f;
 
         Camera cam;
-        Vector2 mapSize;
-        float cellHeight = 1f;
 
         bool dragging;
         Vector2 pressScreenPos;
@@ -29,19 +29,13 @@ namespace DessertFactory
         // Stays true on the frame the button is released so clicks can tell they were really drags
         public bool DraggedThisPress { get; private set; }
 
-        public void Init(Vector2 size, float cellWorldHeight)
-        {
-            mapSize = size;
-            cellHeight = cellWorldHeight;
-        }
-
         // Grid lines are one texel of a SpriteFactory.GridTexels sized cell, so a cell has to
         // cover at least that many screen pixels or the lines start breaking up
         float MaxZoom
         {
             get
             {
-                float limit = cellHeight * Screen.height / (2f * SpriteFactory.GridTexels);
+                float limit = map.Grid.cellSize.y * Screen.height / (2f * SpriteFactory.GridTexels);
                 return Mathf.Max(minZoom, Mathf.Min(maxZoom, limit));
             }
         }
@@ -128,6 +122,7 @@ namespace DessertFactory
 
         void ClampToMap()
         {
+            var mapSize = map.WorldSize;
             var pos = transform.position;
             pos.x = Mathf.Clamp(pos.x, 0f, mapSize.x);
             pos.y = Mathf.Clamp(pos.y, 0f, mapSize.y);

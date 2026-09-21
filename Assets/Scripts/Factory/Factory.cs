@@ -5,20 +5,21 @@ namespace DessertFactory
 {
     public class Factory : MonoBehaviour
     {
-        public DesertMap Map { get; private set; }
+        [SerializeField] DesertMap map;
+        [SerializeField] ItemViewPool itemViews;
+        [SerializeField] int startingCoins = 300;
+
+        public DesertMap Map => map;
         public Stockpile Stockpile { get; private set; }
-        public ItemViewPool ItemViews { get; private set; }
+        public ItemViewPool ItemViews => itemViews;
 
         // every cell a building covers points back at it
         readonly Dictionary<Vector2Int, Building> occupied = new Dictionary<Vector2Int, Building>();
         readonly List<Building> tickOrder = new List<Building>();
 
-        public void Init(DesertMap map, Stockpile stockpile)
+        void Awake()
         {
-            Map = map;
-            Stockpile = stockpile;
-            ItemViews = new GameObject("Item Views").AddComponent<ItemViewPool>();
-            ItemViews.transform.SetParent(transform, false);
+            Stockpile = new Stockpile(startingCoins);
         }
 
         void Update()
@@ -74,18 +75,8 @@ namespace DessertFactory
             if (!free && !Stockpile.TrySpend(def.price))
                 return null;
 
-            var go = new GameObject($"{def.displayName} {origin}");
-            go.transform.SetParent(transform, false);
-
-            Building building;
-            switch (def.kind)
-            {
-                case BuildingKind.Conveyor: building = go.AddComponent<Conveyor>(); break;
-                case BuildingKind.Miner: building = go.AddComponent<MinerGirl>(); break;
-                case BuildingKind.Cook: building = go.AddComponent<CookGirl>(); break;
-                default: building = go.AddComponent<DessertStall>(); break;
-            }
-
+            var building = Instantiate(def.prefab, transform);
+            building.name = $"{def.displayName} {origin}";
             building.Init(this, def, origin, facing);
             foreach (var cell in building.Cells)
                 occupied[cell] = building;

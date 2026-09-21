@@ -5,14 +5,14 @@ namespace DessertFactory
 {
     public class BuildController : MonoBehaviour
     {
-        Factory factory;
-        GameContent content;
-        Camera cam;
-        Hud hud;
-        CameraController cameraController;
+        [SerializeField] Factory factory;
+        [SerializeField] Hud hud;
+        [SerializeField] Camera cam;
+        [SerializeField] CameraController cameraController;
+        [SerializeField] SpriteRenderer ghost;
+        [SerializeField] SpriteRenderer ghostArrow;
 
-        SpriteRenderer ghost;
-        SpriteRenderer ghostArrow;
+        GameContent content;
 
         public BuildingDef Selected { get; private set; }
         public Direction Facing { get; private set; } = Direction.Right;
@@ -21,26 +21,16 @@ namespace DessertFactory
         public bool PointerOverWorld { get; private set; }
         public string PlaceError { get; private set; }
 
-        public void Init(Factory factory, GameContent content, Camera cam, Hud hud)
+        void Awake()
         {
-            this.factory = factory;
+            if (ghostArrow.sprite == null)
+                ghostArrow.sprite = SpriteFactory.Arrow();
+        }
+
+        // Content can be made at startup, so it gets handed over instead of assigned
+        public void Init(GameContent content)
+        {
             this.content = content;
-            this.cam = cam;
-            this.hud = hud;
-            cameraController = cam.GetComponent<CameraController>();
-
-            ghost = new GameObject("Build Ghost").AddComponent<SpriteRenderer>();
-            ghost.transform.SetParent(transform, false);
-            ghost.sortingOrder = 20;
-
-            ghostArrow = new GameObject("Ghost Arrow").AddComponent<SpriteRenderer>();
-            ghostArrow.transform.SetParent(transform, false);
-            ghostArrow.transform.localScale = Vector3.one * 0.3f;
-            ghostArrow.sprite = SpriteFactory.Arrow();
-            ghostArrow.sortingOrder = 21;
-
-            ghost.gameObject.SetActive(false);
-            ghostArrow.gameObject.SetActive(false);
         }
 
         public void Select(BuildingDef def)
@@ -78,7 +68,7 @@ namespace DessertFactory
             }
 
             // right drag pans the camera, a plain right click removes
-            if (mouse.rightButton.wasReleasedThisFrame && (cameraController == null || !cameraController.DraggedThisPress))
+            if (mouse.rightButton.wasReleasedThisFrame && !cameraController.DraggedThisPress)
                 factory.Remove(HoveredCell);
         }
 
@@ -105,17 +95,11 @@ namespace DessertFactory
             if (Selected == null)
                 return;
 
-            if (Selected.kind == BuildingKind.Conveyor)
-            {
-                ghost.sprite = Selected.sprite != null ? Selected.sprite : SpriteFactory.Belt();
-                ghost.transform.rotation = Quaternion.Euler(0, 0, Facing.ToAngle());
-            }
-            else
-            {
-                ghost.sprite = Selected.sprite != null ? Selected.sprite : SpriteFactory.Square();
-                ghost.transform.rotation = Quaternion.identity;
-            }
-
+            var prefab = Selected.prefab;
+            ghost.sprite = prefab.SpriteFor(Selected);
+            if (ghost.sprite == null)
+                prefab.ShowPlaceholder(ghost);
+            ghost.transform.rotation = prefab.TurnsBody ? Quaternion.Euler(0, 0, Facing.ToAngle()) : Quaternion.identity;
             ghostArrow.transform.rotation = Quaternion.Euler(0, 0, Facing.ToAngle());
         }
 
@@ -123,7 +107,7 @@ namespace DessertFactory
         {
             bool show = Selected != null && PointerOverWorld;
             ghost.gameObject.SetActive(show);
-            ghostArrow.gameObject.SetActive(show && Selected.kind != BuildingKind.Conveyor);
+            ghostArrow.gameObject.SetActive(show && Selected.prefab.HasOutputArrow);
             PlaceError = null;
             if (!show)
                 return;
@@ -133,11 +117,8 @@ namespace DessertFactory
             PlacementOrigin = HoveredCell - new Vector2Int((size.x - 1) / 2, (size.y - 1) / 2);
 
             var map = factory.Map;
-            var cellSize = map.Grid.cellSize;
             ghost.transform.position = map.FootprintCenter(PlacementOrigin, size);
-            ghost.transform.localScale = Selected.kind == BuildingKind.Conveyor
-                ? cellSize
-                : new Vector3(size.x * cellSize.x, size.y * cellSize.y, 1f);
+            ghost.transform.localScale = Building.FitScale(ghost.sprite, Selected.prefab.TurnsBody ? Selected.size : size, map.Grid.cellSize);
 
             var output = Building.GetOutputCell(PlacementOrigin, size, Facing);
             ghostArrow.transform.position = Vector3.Lerp(map.CellToWorld(output - Facing.ToOffset()), map.CellToWorld(output), 0.42f);

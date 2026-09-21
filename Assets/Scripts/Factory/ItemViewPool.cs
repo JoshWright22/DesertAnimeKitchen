@@ -5,6 +5,8 @@ namespace DessertFactory
 {
     public class ItemViewPool : MonoBehaviour
     {
+        [SerializeField] SpriteRenderer viewPrefab;
+
         readonly Stack<SpriteRenderer> free = new Stack<SpriteRenderer>();
 
         public SpriteRenderer Get(ItemDef item)
@@ -17,11 +19,7 @@ namespace DessertFactory
             }
             else
             {
-                var go = new GameObject("Item");
-                go.transform.SetParent(transform, false);
-                go.transform.localScale = Vector3.one * 0.35f;
-                view = go.AddComponent<SpriteRenderer>();
-                view.sortingOrder = 10;
+                view = Instantiate(viewPrefab, transform);
             }
 
             // icons already have their colors baked in

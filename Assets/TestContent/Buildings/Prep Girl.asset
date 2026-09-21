@@ -15,7 +15,7 @@ MonoBehaviour:
   displayName: Prep Girl
   description: Turns raw ingredients into sugar, flour, syrup and dough. Click her
     to change recipe.
-  kind: 2
+  prefab: {fileID: 3377430705895170680, guid: eb4f64cc01bce2541b8edc8830a481b0, type: 3}
   price: 35
   size: {x: 1, y: 1}
   sprite: {fileID: 0}

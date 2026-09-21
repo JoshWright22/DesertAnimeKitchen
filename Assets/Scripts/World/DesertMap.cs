@@ -11,6 +11,7 @@ namespace DessertFactory
         [SerializeField] Tilemap groundLayer;
         [SerializeField] Tilemap depositLayer;
         [SerializeField] Tilemap depositGridLayer;
+        [SerializeField] SpriteRenderer gridLines;
         [Tooltip("Sprite used for every ground/deposit tile. Tinted per cell. Leave empty for a plain square.")]
         [SerializeField] Sprite tileSprite;
 
@@ -24,20 +25,23 @@ namespace DessertFactory
         Color[] sandColors;
         Tile tile;
         Tile outlineTile;
-        SpriteRenderer gridLines;
+
+        void Awake()
+        {
+            Grid = GetComponent<Grid>();
+        }
 
         public void Generate(int width, int height, List<DepositDef> deposits, int seed, bool scatterDeposits)
         {
             Width = width;
             Height = height;
-            Grid = GetComponent<Grid>();
             depositTypes.Clear();
             depositTypes.AddRange(deposits);
             depositIndex = new int[width * height];
             depositAmount = new int[width * height];
             sandColors = new Color[width * height];
 
-            SetUpLayers();
+            CreateTiles();
 
             var rng = new System.Random(seed);
             float noiseOffset = rng.Next(0, 10000);
@@ -75,18 +79,11 @@ namespace DessertFactory
 
             DrawGround();
             DrawAllDeposits();
-            CreateGridLines();
+            FitGridLines();
         }
 
-        void SetUpLayers()
+        void CreateTiles()
         {
-            if (groundLayer == null)
-                groundLayer = CreateLayer("Ground", -10);
-            if (depositLayer == null)
-                depositLayer = CreateLayer("Deposits", -9);
-            if (depositGridLayer == null)
-                depositGridLayer = CreateLayer("Deposit Grid", -4);
-
             tile = ScriptableObject.CreateInstance<Tile>();
             tile.sprite = tileSprite != null ? tileSprite : SpriteFactory.Square();
             tile.flags = TileFlags.None;
@@ -94,15 +91,6 @@ namespace DessertFactory
             outlineTile = ScriptableObject.CreateInstance<Tile>();
             outlineTile.sprite = SpriteFactory.CellOutline();
             outlineTile.flags = TileFlags.None;
-        }
-
-        Tilemap CreateLayer(string layerName, int sortingOrder)
-        {
-            var go = new GameObject(layerName);
-            go.transform.SetParent(transform, false);
-            var tilemap = go.AddComponent<Tilemap>();
-            go.AddComponent<TilemapRenderer>().sortingOrder = sortingOrder;
-            return tilemap;
         }
 
         void PaintPatch(int type, Vector2 patchCenter, DepositDef deposit, float noiseSeed)
@@ -197,16 +185,10 @@ namespace DessertFactory
             depositLayer.SetColor(pos, color);
         }
 
-        void CreateGridLines()
+        void FitGridLines()
         {
-            if (gridLines == null)
-            {
-                gridLines = new GameObject("Grid Lines").AddComponent<SpriteRenderer>();
-                gridLines.transform.SetParent(transform, false);
+            if (gridLines.sprite == null)
                 gridLines.sprite = SpriteFactory.GridCell();
-                gridLines.drawMode = SpriteDrawMode.Tiled;
-                gridLines.sortingOrder = -5;
-            }
 
             var cellSize = (Vector2)Grid.cellSize;
             gridLines.size = new Vector2(Width, Height);

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.BuildingDef
   displayName: Dessert Stall
   description: Sells desserts for coins. Anything else sent here is kept in storage.
-  kind: 3
+  prefab: {fileID: 2050600196228450213, guid: 316bead640d17164f9232405ad92614e, type: 3}
   price: 40
   size: {x: 2, y: 2}
   sprite: {fileID: 0}

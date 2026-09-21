@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.BuildingDef
   displayName: Pastry Girl
   description: Bakes finished desserts. Click her to change recipe.
-  kind: 2
+  prefab: {fileID: 3377430705895170680, guid: eb4f64cc01bce2541b8edc8830a481b0, type: 3}
   price: 60
   size: {x: 2, y: 2}
   sprite: {fileID: 0}
