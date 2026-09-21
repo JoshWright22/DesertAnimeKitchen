@@ -10,7 +10,7 @@ Each building is a prefab in `Assets/Prefabs/Buildings` and the factory just ins
 
 ## Content
 
-Items, deposits, recipes, buildings, characters and cutscenes are all ScriptableObjects from `Assets/Scripts/Data`. You make them from the Create menu under Dessert Factory and edit them in the Inspector. The test ones are in `Assets/TestContent`. `TestGameContent` lists everything the game uses and `TestLayout` is the starting factory that gets placed for free. If a scene has no content assigned the game falls back to the placeholder content in `GameContent.CreateDefault()`. `Dessert Factory > Build Test Content` only makes assets that are missing, so it won't wipe anything you changed by hand.
+Items, deposits, recipes, buildings, characters and cutscenes are all ScriptableObjects from `Assets/Scripts/Data`. You make them from the Create menu under Dessert Factory and edit them in the Inspector. The test ones are in `Assets/TestContent`. `TestGameContent` lists everything the game uses. `TestLayout` is a prebuilt factory you can assign as the Starting Layout on `GameBootstrap` if you want to test with everything already running. If a scene has no content assigned the game falls back to the placeholder content in `GameContent.CreateDefault()`. `Dessert Factory > Build Test Content` only makes assets that are missing, so it won't wipe anything you changed by hand.
 
 Art goes in `Assets/Art`. Pixel art should use Point filtering with no compression. Anything without a sprite gets a plain placeholder shape.
 
@@ -29,4 +29,4 @@ Each pull also plays the next cutscene in that girl's story list. The first one 
 
 ## Scenes
 
-Open `Assets/Scenes/TestFactory.unity` to try things out. Everything the game needs is already placed in that scene and wired up in the Inspector, like the map, factory, camera, HUD, gacha and cutscene player. `GameBootstrap` on the Game object just generates the map, places the starting layout and hands the content to everything else. A new game scene needs the same objects, so copying them over from TestFactory is the easiest way to start one.
+Open `Assets/Scenes/TestFactory.unity` to try things out. It starts with an empty map so you build everything yourself. Everything the game needs is already placed in that scene and wired up in the Inspector, like the map, factory, camera, HUD, gacha and cutscene player. `GameBootstrap` on the Game object just generates the map, places the starting layout if there is one and hands the content to everything else. A new game scene needs the same objects, so copying them over from TestFactory is the easiest way to start one.
