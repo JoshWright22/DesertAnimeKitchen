@@ -7,7 +7,7 @@ using UnityEngine;
 namespace DessertFactory.EditorTools
 {
     // Saves the placeholder content out as real assets so it can be tweaked in the inspector.
-    // Running it again updates the existing assets in place, so scene references stay intact.
+    // Running it again only adds assets that are missing, so art and anything else set by hand stays.
     public static class TestContentBuilder
     {
         const string Root = "Assets/TestContent";
@@ -138,17 +138,11 @@ namespace DessertFactory.EditorTools
             string path = $"{dir}/{obj.name}.asset";
 
             var existing = AssetDatabase.LoadAssetAtPath<T>(path);
-            if (existing == null)
-            {
-                AssetDatabase.CreateAsset(obj, path);
-                return obj;
-            }
+            if (existing != null)
+                return existing;
 
-            string assetName = existing.name;
-            EditorUtility.CopySerialized(obj, existing);
-            existing.name = assetName;
-            EditorUtility.SetDirty(existing);
-            return existing;
+            AssetDatabase.CreateAsset(obj, path);
+            return obj;
         }
 
         static void EnsureFolder(string path)
