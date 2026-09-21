@@ -11,6 +11,7 @@ namespace DessertFactory
         public List<DepositDef> deposits = new List<DepositDef>();
         public List<RecipeDef> recipes = new List<RecipeDef>();
         public List<BuildingDef> buildings = new List<BuildingDef>();
+        public List<CharacterDef> characters = new List<CharacterDef>();
 
         // Placeholder content so the game runs without any assets set up.
         // Once real assets exist, make a GameContent asset and assign it on GameBootstrap.
@@ -91,6 +92,7 @@ namespace DessertFactory
             item.color = color;
             item.isDessert = sellPrice > 0;
             item.sellPrice = sellPrice;
+            item.stars = sellPrice / 10;
             items.Add(item);
             return item;
         }

@@ -17,3 +17,4 @@ MonoBehaviour:
   icon: {fileID: 0}
   isDessert: 1
   sellPrice: 14
+  stars: 1

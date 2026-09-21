@@ -13,5 +13,7 @@ namespace DessertFactory
         // Desserts get sold when they reach a stall, everything else just goes into storage
         public bool isDessert;
         public int sellPrice;
+        [Tooltip("Stars for the gacha, given on top of the coins")]
+        public int stars;
     }
 }

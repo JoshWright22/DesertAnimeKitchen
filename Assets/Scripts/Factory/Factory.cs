@@ -16,6 +16,7 @@ namespace DessertFactory
         // every cell a building covers points back at it
         readonly Dictionary<Vector2Int, Building> occupied = new Dictionary<Vector2Int, Building>();
         readonly List<Building> tickOrder = new List<Building>();
+        readonly Dictionary<BuildingDef, int> placedCounts = new Dictionary<BuildingDef, int>();
 
         void Awake()
         {
@@ -33,6 +34,12 @@ namespace DessertFactory
         {
             occupied.TryGetValue(cell, out var building);
             return building;
+        }
+
+        public int CountPlaced(BuildingDef def)
+        {
+            placedCounts.TryGetValue(def, out int count);
+            return count;
         }
 
         public bool CanPlace(BuildingDef def, Vector2Int origin, Direction facing, out string reason, bool free = false)
@@ -65,6 +72,8 @@ namespace DessertFactory
                 reason = "Needs to go on a deposit";
             if (reason == null && !free && Stockpile.Coins < def.price)
                 reason = "Not enough coins";
+            if (reason == null && !free && Stockpile.IsLimited(def) && CountPlaced(def) >= Stockpile.Owned(def))
+                reason = "No more of her, pull another from the gacha";
             return reason == null;
         }
 
@@ -74,6 +83,9 @@ namespace DessertFactory
                 return null;
             if (!free && !Stockpile.TrySpend(def.price))
                 return null;
+            // girls the starting layout hands out count as owned
+            if (free && Stockpile.IsLimited(def))
+                Stockpile.AddWorkers(def);
 
             var building = Instantiate(def.prefab, transform);
             building.name = $"{def.displayName} {origin}";
@@ -81,6 +93,7 @@ namespace DessertFactory
             foreach (var cell in building.Cells)
                 occupied[cell] = building;
             tickOrder.Add(building);
+            placedCounts[def] = CountPlaced(def) + 1;
             return building;
         }
 
@@ -94,6 +107,7 @@ namespace DessertFactory
             foreach (var c in building.Cells)
                 occupied.Remove(c);
             tickOrder.Remove(building);
+            placedCounts[building.Def]--;
             Stockpile.AddCoins(building.Def.price);
             Destroy(building.gameObject);
         }

@@ -30,6 +30,7 @@ namespace DessertFactory
 
         readonly List<BuildingDef> buttonDefs = new List<BuildingDef>();
         readonly List<Button> buttons = new List<Button>();
+        readonly List<int> shownLeft = new List<int>();
         BuildingDef highlighted;
         readonly StringBuilder sb = new StringBuilder();
 
@@ -45,11 +46,11 @@ namespace DessertFactory
                 var button = Instantiate(buildButtonTemplate, toolbar);
                 button.name = def.displayName;
                 button.gameObject.SetActive(true);
-                button.GetComponentInChildren<Text>().text = $"[{i + 1}] {def.displayName}\n{def.price} coins";
                 button.onClick.AddListener(() => builder.Select(builder.Selected == def ? null : def));
 
                 buttonDefs.Add(def);
                 buttons.Add(button);
+                shownLeft.Add(-1);
             }
 
             hideHelpButton.onClick.AddListener(() => SetHelpVisible(false));
@@ -80,6 +81,8 @@ namespace DessertFactory
             if (highlighted != builder.Selected)
                 RefreshHighlight();
 
+            RefreshButtonLabels();
+
             RefreshInfo();
         }
 
@@ -93,10 +96,29 @@ namespace DessertFactory
         {
             var stock = factory.Stockpile;
             sb.Clear();
-            sb.Append($"<b>Coins: {stock.Coins}</b>    Sold: {stock.DessertsSold}");
+            sb.Append($"<b>Coins: {stock.Coins}    Stars: {stock.Stars}</b>    Sold: {stock.DessertsSold}");
             foreach (var pair in stock.Items)
                 sb.Append($"\n{pair.Key.displayName}: {pair.Value}");
             stockText.text = sb.ToString();
+        }
+
+        // girls show how many more you can place, which changes whenever one is placed or pulled
+        void RefreshButtonLabels()
+        {
+            for (int i = 0; i < buttons.Count; i++)
+            {
+                var def = buttonDefs[i];
+                bool limited = factory.Stockpile.IsLimited(def);
+                int left = limited ? factory.Stockpile.Owned(def) - factory.CountPlaced(def) : 0;
+                if (left == shownLeft[i])
+                    continue;
+
+                shownLeft[i] = left;
+                var label = $"[{i + 1}] {def.displayName}\n{def.price} coins";
+                if (limited)
+                    label += $", {left} left";
+                buttons[i].GetComponentInChildren<Text>().text = label;
+            }
         }
 
         void RefreshHighlight()

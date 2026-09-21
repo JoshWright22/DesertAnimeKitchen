@@ -15,6 +15,7 @@ namespace DessertFactory
         [SerializeField] Factory factory;
         [SerializeField] BuildController builder;
         [SerializeField] Hud hud;
+        [SerializeField] Gacha gacha;
         [SerializeField] Camera cam;
 
         [SerializeField] int mapWidth = 128;
@@ -28,6 +29,7 @@ namespace DessertFactory
                 content = GameContent.CreateDefault(placeholderPrefabs);
 
             map.Generate(mapWidth, mapHeight, content.deposits, seed, scatterDeposits);
+            gacha.Init(content);
             if (startingLayout != null)
                 startingLayout.Apply(map, factory);
 
