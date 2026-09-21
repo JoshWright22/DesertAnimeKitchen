@@ -1173,7 +1173,7 @@ MonoBehaviour:
   - {fileID: 693591305789761005, guid: 6c08f6fbaa5c57640993f283d0f40b7b, type: 3}
   - {fileID: 3377430705895170680, guid: eb4f64cc01bce2541b8edc8830a481b0, type: 3}
   - {fileID: 2050600196228450213, guid: 316bead640d17164f9232405ad92614e, type: 3}
-  startingLayout: {fileID: 0}
+  startingLayout: {fileID: 11400000, guid: 500e50eaf0859464a988708ba5b53d4a, type: 2}
   map: {fileID: 752371795}
   factory: {fileID: 2103754158}
   builder: {fileID: 1323100754}

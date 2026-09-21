@@ -37,6 +37,30 @@ MonoBehaviour:
       y: 16
       width: 3
       height: 3
+  - deposit: {fileID: 11400000, guid: 0c86e752363d9fe43b429951ecf00e48, type: 2}
+    area:
+      x: 2
+      y: 22
+      width: 3
+      height: 3
+  - deposit: {fileID: 11400000, guid: 79dea5e813e6fa442a584be5aeb74a60, type: 2}
+    area:
+      x: 2
+      y: 27
+      width: 3
+      height: 3
+  - deposit: {fileID: 11400000, guid: e719630f2423ea94db66624f3c62074b, type: 2}
+    area:
+      x: 20
+      y: 22
+      width: 3
+      height: 3
+  - deposit: {fileID: 11400000, guid: 7540748dc152f43458fc674d733f0c4c, type: 2}
+    area:
+      x: 20
+      y: 27
+      width: 3
+      height: 3
   buildings:
   - building: {fileID: 11400000, guid: 11d5816eca767464abdb0e410b501b2b, type: 2}
     cell: {x: 3, y: 11}
@@ -244,5 +268,157 @@ MonoBehaviour:
     recipe: 0
   - building: {fileID: 11400000, guid: 0e6dbbd0d0128d24dbef39c871873ecb, type: 2}
     cell: {x: 10, y: 17}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 11d5816eca767464abdb0e410b501b2b, type: 2}
+    cell: {x: 3, y: 23}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 11d5816eca767464abdb0e410b501b2b, type: 2}
+    cell: {x: 4, y: 24}
+    facing: 2
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 4, y: 23}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 5, y: 23}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 6, y: 23}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 2d7d9fb4705065d46829be0cc506c023, type: 2}
+    cell: {x: 7, y: 23}
+    facing: 1
+    recipe: 1
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 8, y: 23}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 9, y: 23}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 10, y: 23}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 11, y: 23}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 11d5816eca767464abdb0e410b501b2b, type: 2}
+    cell: {x: 3, y: 28}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 11d5816eca767464abdb0e410b501b2b, type: 2}
+    cell: {x: 4, y: 29}
+    facing: 2
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 4, y: 28}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 5, y: 28}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 6, y: 28}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 2d7d9fb4705065d46829be0cc506c023, type: 2}
+    cell: {x: 7, y: 28}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 8, y: 28}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 9, y: 28}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 10, y: 28}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 11, y: 28}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 12, y: 28}
+    facing: 2
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 12, y: 27}
+    facing: 2
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 12, y: 26}
+    facing: 2
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 12, y: 25}
+    facing: 2
+    recipe: 0
+  - building: {fileID: 11400000, guid: b19c6f81cdbeff04b8775a6ea288a045, type: 2}
+    cell: {x: 12, y: 23}
+    facing: 1
+    recipe: 3
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 14, y: 23}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 15, y: 23}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 0e6dbbd0d0128d24dbef39c871873ecb, type: 2}
+    cell: {x: 16, y: 22}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 11d5816eca767464abdb0e410b501b2b, type: 2}
+    cell: {x: 21, y: 23}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 22, y: 23}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 23, y: 23}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 24, y: 23}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 0e6dbbd0d0128d24dbef39c871873ecb, type: 2}
+    cell: {x: 25, y: 22}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 11d5816eca767464abdb0e410b501b2b, type: 2}
+    cell: {x: 21, y: 28}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 22, y: 28}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 23, y: 28}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
+    cell: {x: 24, y: 28}
+    facing: 1
+    recipe: 0
+  - building: {fileID: 11400000, guid: 0e6dbbd0d0128d24dbef39c871873ecb, type: 2}
+    cell: {x: 25, y: 27}
     facing: 1
     recipe: 0

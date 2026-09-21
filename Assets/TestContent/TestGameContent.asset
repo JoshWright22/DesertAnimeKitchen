@@ -25,12 +25,17 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a9fbe6f564332c04baabbe61929d0238, type: 2}
   - {fileID: 11400000, guid: c40b15f5858c8ad42b7227f1d2f072f6, type: 2}
   - {fileID: 11400000, guid: e6cbac46bf54ed1499871f5ede4c809b, type: 2}
+  - {fileID: 11400000, guid: 1559943ec2b3d6947929793425c5b43f, type: 2}
+  - {fileID: 11400000, guid: a272b0c7382d1494997c2816494945d6, type: 2}
+  - {fileID: 11400000, guid: 06250563161ff5544ace9ffe2e09ad47, type: 2}
   deposits:
   - {fileID: 11400000, guid: 79dea5e813e6fa442a584be5aeb74a60, type: 2}
   - {fileID: 11400000, guid: de023cfe586b2d441915651864608c1e, type: 2}
   - {fileID: 11400000, guid: 7f31605e7fd3b8e4d8aeaf98ea18fba1, type: 2}
   - {fileID: 11400000, guid: 0c86e752363d9fe43b429951ecf00e48, type: 2}
   - {fileID: 11400000, guid: 6df9fe5e953083f4193dd06ca584b24b, type: 2}
+  - {fileID: 11400000, guid: e719630f2423ea94db66624f3c62074b, type: 2}
+  - {fileID: 11400000, guid: 7540748dc152f43458fc674d733f0c4c, type: 2}
   recipes:
   - {fileID: 11400000, guid: 21bd26b053e50664193f908f8724dd03, type: 2}
   - {fileID: 11400000, guid: 2afc703765411114a8666459610c8fe1, type: 2}
@@ -39,6 +44,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 593707d02bab44143a68ac1842f9db73, type: 2}
   - {fileID: 11400000, guid: a96d8a53c359bac4ba40b66c8211ec2a, type: 2}
   - {fileID: 11400000, guid: 730f01e75059ae2469986981d6759168, type: 2}
+  - {fileID: 11400000, guid: 19ae610b136b2c542b6833fd10361880, type: 2}
   buildings:
   - {fileID: 11400000, guid: 53a3689ec1effe640907a7b8d095a65e, type: 2}
   - {fileID: 11400000, guid: 11d5816eca767464abdb0e410b501b2b, type: 2}
