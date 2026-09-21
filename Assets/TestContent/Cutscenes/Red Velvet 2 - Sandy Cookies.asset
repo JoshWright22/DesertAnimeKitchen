@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2e40976f4c49fc4bbc7e51347be4eb8, type: 3}
+  m_Name: Red Velvet 2 - Sandy Cookies
+  m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.Cutscene
+  title: Red Velvet 2 - Sandy Cookies
+  background: {fileID: 0}
+  lines:
+  - speaker: {fileID: 0}
+    portrait: {fileID: 0}
+    text: Red Velvet comes back from the stall with a tray of cookies. They crunch
+      in a way cookies really shouldn't.
+  - speaker: {fileID: 11400000, guid: 3e7256f479e27014c8e5604f585940ce, type: 2}
+    portrait: {fileID: 21300000, guid: 909ae1641032b7e45b95a90fa23c4165, type: 3}
+    text: ...There is sand in the cookies.
+  - speaker: {fileID: 11400000, guid: 3e7256f479e27014c8e5604f585940ce, type: 2}
+    portrait: {fileID: 21300000, guid: 909ae1641032b7e45b95a90fa23c4165, type: 3}
+    text: I asked for one thing. One.
+  - speaker: {fileID: 11400000, guid: 3e7256f479e27014c8e5604f585940ce, type: 2}
+    portrait: {fileID: 0}
+    text: It's fine. The customers called it authentic desert texture and bought
+      every last one.
+  - speaker: {fileID: 11400000, guid: 3e7256f479e27014c8e5604f585940ce, type: 2}
+    portrait: {fileID: 0}
+    text: We are still fixing the belts though.

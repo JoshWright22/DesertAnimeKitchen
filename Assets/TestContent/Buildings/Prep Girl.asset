@@ -18,7 +18,7 @@ MonoBehaviour:
   prefab: {fileID: 3377430705895170680, guid: eb4f64cc01bce2541b8edc8830a481b0, type: 3}
   price: 35
   size: {x: 1, y: 1}
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 7f208749c8a88584e81bfd9c3b9a1368, type: 3}
   workTime: 1
   needsDeposit: 0
   recipes:

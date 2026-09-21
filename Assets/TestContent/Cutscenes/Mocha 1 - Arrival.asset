@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2e40976f4c49fc4bbc7e51347be4eb8, type: 3}
+  m_Name: Mocha 1 - Arrival
+  m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.Cutscene
+  title: Mocha 1 - Arrival
+  background: {fileID: 0}
+  lines:
+  - speaker: {fileID: 0}
+    portrait: {fileID: 0}
+    text: Someone is already in the prep kitchen, sorting the sugar by how shiny
+      it is.
+  - speaker: {fileID: 11400000, guid: 38349f15a2a67ab4ab24bc0108f5df13, type: 2}
+    portrait: {fileID: 0}
+    text: Oh! You're the manager? Sorry, I let myself in. The door was open. Well,
+      it's a tent.
+  - speaker: {fileID: 11400000, guid: 38349f15a2a67ab4ab24bc0108f5df13, type: 2}
+    portrait: {fileID: 0}
+    text: I'm Mocha. I turn the raw stuff into sugar, flour, syrup and dough, whatever
+      the pastry girls need.
+  - speaker: {fileID: 11400000, guid: 38349f15a2a67ab4ab24bc0108f5df13, type: 2}
+    portrait: {fileID: 0}
+    text: I like things neat. If a belt shows up all tangled I will be sad about
+      it.

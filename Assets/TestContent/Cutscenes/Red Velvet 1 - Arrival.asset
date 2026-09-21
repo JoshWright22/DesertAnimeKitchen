@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2e40976f4c49fc4bbc7e51347be4eb8, type: 3}
+  m_Name: Red Velvet 1 - Arrival
+  m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.Cutscene
+  title: Red Velvet 1 - Arrival
+  background: {fileID: 0}
+  lines:
+  - speaker: {fileID: 0}
+    portrait: {fileID: 0}
+    text: The stall bell rings. A maid is standing at the counter with a perfectly
+      folded apron.
+  - speaker: {fileID: 11400000, guid: 3e7256f479e27014c8e5604f585940ce, type: 2}
+    portrait: {fileID: 0}
+    text: Good afternoon. I heard there's a factory baking desserts out in the middle
+      of the desert.
+  - speaker: {fileID: 11400000, guid: 3e7256f479e27014c8e5604f585940ce, type: 2}
+    portrait: {fileID: 0}
+    text: I'm Red Velvet. I'll take charge of the ovens. Cakes, cookies, sorbet,
+      croissants, I can make all of it.
+  - speaker: {fileID: 11400000, guid: 3e7256f479e27014c8e5604f585940ce, type: 2}
+    portrait: {fileID: 0}
+    text: Just try to keep the sand out of the batter, please.
