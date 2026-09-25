@@ -1,0 +1,38 @@
+﻿title: Start
+---
+Jennifer: A plot of land in a foreign country and some dirt cheap labor. That's all any executive needs to make a fortune. You ready to get started?
+
+-> I was born ready. (skip tutorial)
+    <<jump Milstones>>
+
+-> What am I doing again? (tutorial)
+    <<jump Tutorial>>
+===
+title: Milstones 
+---
+Jennifer: That's what I like to hear!
+Jennifer: There will be three milestones to profitability. First one is due in five days, [one million]. That's in profit, you hear? Bottom line. None of this wish-washy "healthcare for the drones" crap. That'll eat into the margin. Stomp that out.
+
+->  I'll stomp on anyone you tell me to, beautiful.
+    Jennifer: Try not to drool, it's unbecoming. But hit every milestones and you can drool as much as you want.
+    <<jump Day_One_Start>>
+
+-> Can't we give them just a *little* healthcare?
+    Jennifer: Are you insane?! Next thing you know they're asking for time off! Then where would our productivity metrics be? 
+    <<jump Day_One_Start>>
+===
+title: Tutorial
+---
+Jennifer: Christ, didn't they teach you *anything* at graduate school? 
+===
+title: Day_One_Start
+---
+Jennifer: We're giving you a small loan of [debt] to get you started and three drones. They're paid through the day, but tomorrow their wages will start eating into your revenue, so you'd better get to it. Call me if the workers revolt. Otherwise, see you in five days.
+
+Red Velvet: Nice to meet you boss! I'm Red Velvet. I'll be in charge of...erm...the red velvet cakes. [gameplay explaination] The girls and I are paid through to 5 pm, so we are ready to get to work when you are! 
+-> Actually, how about you stick around until 8 pm?
+    Overtime
+-> Is there anything you need?
+
+===
+title: 
