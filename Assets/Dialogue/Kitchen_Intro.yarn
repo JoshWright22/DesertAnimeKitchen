@@ -1,14 +1,14 @@
-﻿title: Start
+﻿title: Game_Start
 ---
 Jennifer: A plot of land in a foreign country and some dirt cheap labor. That's all any executive needs to make a fortune. You ready to get started?
 
 -> I was born ready. (skip tutorial)
-    <<jump Milstones>>
+    <<jump Intro_Milestones>>
 
 -> What am I doing again? (tutorial)
     <<jump Tutorial>>
 ===
-title: Milstones 
+title: Intro_Milestones
 ---
 Jennifer: That's what I like to hear!
 Jennifer: There will be three milestones to profitability. First one is due in five days, [one million]. That's in profit, you hear? Bottom line. None of this wish-washy "healthcare for the drones" crap. That'll eat into the margin. Stomp that out.
@@ -35,4 +35,3 @@ Red Velvet: Nice to meet you boss! I'm Red Velvet. I'll be in charge of...erm...
 -> Is there anything you need?
 
 ===
-title: 
