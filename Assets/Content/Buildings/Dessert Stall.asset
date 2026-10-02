@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Dessert Stall
   m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.BuildingDef
   displayName: Dessert Stall
-  description: Sells desserts for coins. Anything else sent here is kept in storage.
+  description: Sells anything you send it for coins, and desserts for stars too.
   prefab: {fileID: 2050600196228450213, guid: 316bead640d17164f9232405ad92614e, type: 3}
   price: 2000
   wage: 0

@@ -53,7 +53,7 @@ The girls are already sweeping sand off the stall when the jet lands. Nobody wav
 title: Ending_Jennifer
 ---
 Jennifer: You actually did it. Three for three.
-Jennifer: The board wants you at headquarters. Top floor. The office next to mine, like I said.
+Jennifer: The board wants you at headquarters. Top floor. The office next to mine.
 <<if not $knows_jennifer>>
 Jennifer: And it's Jennifer. Not Corpo-sama. You've earned that much.
 <<set $knows_jennifer to true>>
@@ -70,11 +70,11 @@ The jet lands at sunset. She's on it. She says she was in the area. Licorich doe
 ===
 title: Ending_Red_Velvet
 ---
-Red Velvet: Erm...boss? Before you answer that phone. We need to talk.
+Red Velvet: Erm...boss? Before corporate calls back. We need to talk.
 Red Velvet: The girls and I took a vote. We're a union now. Fair wages, shade, and five o'clock means five o'clock.
 Red Velvet: They voted on something else too. I...erm...wasn't allowed to vote on that one. #cringe
 Red Velvet: They want you to stay. And I want...I also want you to stay. Not as our boss. Well, as our boss. But also not.
-You pick up the phone.
+Your phone rings again.
 Jennifer: What is this I'm hearing about a *union*?! #scolding
 -> I'm staying. With them.
     Jennifer: Then enjoy the sand. That's all you'll be getting from Licorich. #scolding
@@ -90,11 +90,11 @@ The jet never comes. You stop listening for it.
 ===
 title: Ending_Unionized
 ---
-Red Velvet: Erm...boss? Before you answer that phone. We need to talk. #cringe
+Red Velvet: Erm...boss? Before corporate calls back. We need to talk. #cringe
 Red Velvet: The girls and I took a vote. We're a union now. Fair wages, shade, and five o'clock means five o'clock.
 Red Velvet: Also Honey says we keep the burnt ones. And Mocha says *all* the burnt ones.
 Red Velvet: And...we'd like you to stay. As our boss. If you want.
-You pick up the phone.
+Your phone rings again.
 Jennifer: What is this I'm hearing about a *union*?! #scolding
 -> I'm with them.
     Jennifer: Then you can stay out there with them. Enjoy the sand. #scolding

@@ -80,7 +80,11 @@ Red Velvet: She wants to know if the girls can eat the burnt ones. Nobody's goin
 title: Day_8_Start
 ---
 Your phone rings. You already know who it is.
+<<if $on_track>>
+Jennifer: Quick one. The board loved your numbers. So naturally, they want more of them. #scolding
+<<else>>
 Jennifer: Quick one. The board looked at your numbers and laughed. Not the good kind of laugh. #scolding
+<<endif>>
 Jennifer: Mandatory overtime. Every day until the next milestone. I don't want to hear about it.
 -> Consider it done.
     <<overtime_every_day true>>
@@ -102,7 +106,7 @@ Red Velvet: We'll manage. We always manage.
 title: Day_11_Start
 ---
 Red Velvet: Boss? The girls asked me to ask you something. They drew straws. I lost. #cringe
-Red Velvet: They were wondering about a raise. Just a little one. Everyone's wages would go up a bit every day.
+Red Velvet: They were wondering about a raise. Just a little one. Everyone's wages would go up a bit.
 -> Give everyone a raise.
     <<raise_wages 0.2>>
     <<set $workers += 1>>

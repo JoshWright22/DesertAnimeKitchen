@@ -51,7 +51,7 @@ namespace DessertFactory
                 // ones she hasn't learned stay on the list greyed out, so you know what the gacha could still bring
                 bool known = girl.Knows(recipe);
                 button.SetLabel(known
-                    ? $"{recipe.displayName}\n<size=80%>{made.sellPrice:N0} coins, {made.stars} stars</size>"
+                    ? $"{recipe.displayName}\n<size=80%>{made.sellPrice:N0} coins, {Stars(made.stars)}</size>"
                     : $"{recipe.displayName}\n<size=80%>Not learned yet, try the gacha</size>");
                 button.SetLocked(!known);
                 button.Button.onClick.AddListener(() => cook.SetRecipe(index));
@@ -120,7 +120,7 @@ namespace DessertFactory
 
             text.Clear();
             foreach (var output in recipe.outputs)
-                text.Append($"{output.item.displayName} sells for {output.item.sellPrice:N0} coins and {output.item.stars} stars\n");
+                text.Append($"{output.item.displayName} sells for {output.item.sellPrice:N0} coins and {Stars(output.item.stars)}\n");
             if (cook.Blocked)
                 text.Append("<color=#970b23>Nowhere to put it, run a belt out of her front</color>");
             else if (cook.Cooking)
@@ -147,6 +147,11 @@ namespace DessertFactory
             arrow.SetAsLastSibling();
             foreach (var output in recipe.outputs)
                 outputSlots.Add(AddSlot(output.item, $"x{output.amount}"));
+        }
+
+        static string Stars(int stars)
+        {
+            return stars == 1 ? "1 star" : $"{stars} stars";
         }
 
         // Destroy waits for the end of the frame, hiding it first keeps it out of this frame's layout
