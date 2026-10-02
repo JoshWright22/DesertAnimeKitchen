@@ -19,7 +19,8 @@ namespace DessertFactory
         protected Factory Factory { get; private set; }
 
         public bool TurnsBody => turnBody;
-        public bool HasOutputArrow => outputArrow != null;
+        // Whether the build ghost points out which way she'll face
+        public virtual bool ShowsFacing => outputArrow != null;
 
         // The cell just past our front edge, where finished items get handed off
         public Vector2Int OutputCell => GetOutputCell(Origin, Size, Facing);
@@ -59,7 +60,7 @@ namespace DessertFactory
             Size = RotatedSize(def.size, facing);
             transform.position = factory.Map.FootprintCenter(origin, Size);
 
-            body.sprite = SpriteFor(def);
+            body.sprite = SpriteFor(def, facing);
             if (body.sprite == null)
                 ShowPlaceholder(body);
             if (turnBody)
@@ -76,7 +77,12 @@ namespace DessertFactory
             }
         }
 
-        public Sprite SpriteFor(BuildingDef def) => def.sprite != null ? def.sprite : body.sprite;
+        public virtual Sprite SpriteFor(BuildingDef def, Direction facing) => def.sprite != null ? def.sprite : body.sprite;
+
+        // Called after something is placed or removed next to us
+        public virtual void NeighboursChanged()
+        {
+        }
 
         // Only used until the building has real art
         public virtual void ShowPlaceholder(SpriteRenderer target)
@@ -108,6 +114,8 @@ namespace DessertFactory
         {
             return string.Empty;
         }
+
+        protected SpriteRenderer Body => body;
 
         protected bool TryPushForward(ItemDef item)
         {

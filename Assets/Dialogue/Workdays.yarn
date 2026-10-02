@@ -1,0 +1,137 @@
+title: Closing_Time
+---
+=> Red Velvet: It's 5 pm, boss! Should the girls head home?
+=> Red Velvet: That's five o'clock. The girls are...erm...looking at the door. #cringe
+=> Red Velvet: Five already! Home time, or are we staying late?
+-> Go home. Good work today.
+    => Red Velvet: Thank you, boss! See you in the morning.
+    => Red Velvet: Yay! I mean...understood.
+-> Stay until 8 pm. Overtime pay.
+    <<overtime>>
+    => Red Velvet: Well...okay. 1.25 times the usual rate, don't forget. #cringe
+    => Red Velvet: The girls won't love it, but okay. Three more hours! #cringe
+===
+title: Day_End
+---
+<<if $day == 1>>
+Day one is done. You made {$revenue_today}, and corporate covered the wages. That won't happen again.
+<<else>>
+Day {$day} is done. You made {$revenue_today} and paid {$wages_today} in wages.
+<<endif>>
+<<if not $milestone_today>>
+    <<if $on_track>>
+    Profit is sitting at {$profit}. That's already past the {$goal} corporate wants. Don't tell them, they'll raise it.
+    <<elseif $days_left == 1>>
+    Profit is sitting at {$profit}. Corporate wants {$goal} by tomorrow night.
+    <<else>>
+    Profit is sitting at {$profit}. Corporate wants {$goal} in {$days_left} more days.
+    <<endif>>
+<<endif>>
+===
+title: Day_2_Start
+---
+Red Velvet: Good morning, boss! Erm...just a reminder, today's the first day we're on the clock. Wages come out at the end of the day.
+Red Velvet: No pressure! ...Okay, a little pressure.
+===
+title: Day_3_Start
+---
+Red Velvet: Boss, it's...erm...really hot out there today. Honey almost fainted into the dough. #cringe
+Red Velvet: She says she's fine. She says the dough broke her fall.
+Red Velvet: Could we get some umbrellas for the girls? It'd be about $50,000.
+-> Buy the umbrellas.
+    <<spend 50000>>
+    <<set $umbrellas to true>>
+    <<set $workers += 1>>
+    Red Velvet: Thank you, boss! The girls are going to love this.
+-> Sand is free. Shade isn't.
+    <<set $corporate += 1>>
+    Red Velvet: ...Right. I'll tell them to drink more water. We have water, right? #cringe
+===
+title: Day_4_Start
+---
+Your phone rings. You already know who it is.
+Jennifer: One of your drones filed an insurance claim. Heatstroke. Something about fainting into the dough.
+<<if $umbrellas>>
+Jennifer: Under an umbrella. That *you* bought. I'm still reviewing that, by the way.
+<<endif>>
+Jennifer: Licorich has a very generous insurance policy. It covers almost nothing. Deny it.
+-> Denied.
+    <<set $corporate += 1>>
+    Jennifer: Good. You'd be amazed how many managers get squeamish about that.
+    Jennifer: You're not squeamish. I like that. ...In an employee.
+-> Approve it. She fainted into a vat of dough.
+    <<spend 60000>>
+    <<set $workers += 1>>
+    Jennifer: Fine. It's coming out of *your* bottom line, not mine. #scolding
+    Red Velvet: Boss...Honey told me about the claim. Thank you. Really.
+    Red Velvet: She baked you something. It's...erm...shaped like you. Mostly. #cringe
+===
+title: Day_7_Start
+---
+Red Velvet: Boss! Mocha burnt a batch of croissants this morning.
+Red Velvet: She wants to know if the girls can eat the burnt ones. Nobody's going to buy them anyway.
+-> Eat up. You earned it.
+    <<set $workers += 1>>
+    Red Velvet: Yay! Mocha's going to tell everyone you're the best boss ever. She's...erm...already telling everyone.
+-> Every crumb belongs to Licorich Inc.
+    <<set $corporate += 1>>
+    Red Velvet: ...Even the burnt crumbs? I'll let her know. She's not going to take it well. #cringe
+===
+title: Day_8_Start
+---
+Your phone rings. You already know who it is.
+Jennifer: Quick one. The board looked at your numbers and laughed. Not the good kind of laugh. #scolding
+Jennifer: Mandatory overtime. Every day until the next milestone. I don't want to hear about it.
+-> Consider it done.
+    <<overtime_every_day true>>
+    <<set $overtime_week to true>>
+    <<set $corporate += 1>>
+    Jennifer: Look at you, learning.
+-> They're already working until they drop.
+    <<set $workers += 1>>
+    Jennifer: Then they can drop *after* 8 pm. ...Fine. Your funeral. Your margins, too. #scolding
+===
+title: Day_9_Start
+---
+<<if $overtime_week>>
+Red Velvet: Morning, boss. The girls are...erm...tired. Honey fell asleep on the belt last night. #cringe
+Red Velvet: She says it was moving, so it was like a little bed. I don't think that's how beds work.
+Red Velvet: We'll manage. We always manage.
+<<endif>>
+===
+title: Day_11_Start
+---
+Red Velvet: Boss? The girls asked me to ask you something. They drew straws. I lost. #cringe
+Red Velvet: They were wondering about a raise. Just a little one. Everyone's wages would go up a bit every day.
+-> Give everyone a raise.
+    <<raise_wages 0.2>>
+    <<set $workers += 1>>
+    Red Velvet: Really?! Boss, you're...erm...you're the best. I'm going to go tell them. Running. I'm running now.
+-> Licorich pays the market rate.
+    <<set $corporate += 1>>
+    Red Velvet: ...The market rate is the only rate out here, boss. There's no other market. #cringe
+    <<if $corporate > $workers>>
+    Your phone buzzes. A text from Corporate. Just a thumbs up. You're not sure how she knew.
+    <<endif>>
+===
+title: Day_12_Start
+---
+Red Velvet: Boss, can I tell you something? Off the record?
+Red Velvet: Some of the girls have been talking. About a...erm...union.
+-> Tell them I'm in.
+    <<set $workers += 2>>
+    Red Velvet: Really?! I mean...okay! I'll let them know. Quietly.
+-> Give me names.
+    <<set $corporate += 2>>
+    Red Velvet: ...I didn't say anything. I was talking about onions. A union of onions. #cringe
+===
+title: Day_13_Start
+---
+<<if $corporate >= 4 and not $knows_jennifer>>
+Your phone rings. It's Corporate, and she sounds almost pleasant.
+Jennifer: The board's been asking about you. In a good way, for once.
+Jennifer: You can stop calling me Corpo-sama, by the way. It's Jennifer.
+<<set $knows_jennifer to true>>
+Jennifer: Don't make it weird. #scolding
+<<endif>>
+===

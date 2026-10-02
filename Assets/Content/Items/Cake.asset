@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8eac60e6e24f8141a1e09f2b1aa7115, type: 3}
+  m_Name: Cake
+  m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.ItemDef
+  displayName: Cake
+  color: {r: 1, g: 1, b: 1, a: 1}
+  icon: {fileID: 21300000, guid: 5b8cd5177e4a4fec95a397e4501be186, type: 3}
+  sparkle:
+  - {fileID: 21300000, guid: 7c48b6f3d024468899bab585c11817a9, type: 3}
+  - {fileID: 21300000, guid: 3157c522abe24905a7de7b83806720ed, type: 3}
+  sparkleEvery: 1.6
+  sparkleFrameTime: 0.09
+  sellPrice: 400
+  stars: 0

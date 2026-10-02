@@ -50,26 +50,6 @@ namespace DessertFactory
             });
         }
 
-        // Border around the whole cell, tinted per deposit
-        public static Sprite CellOutline()
-        {
-            return Cached("celloutline", () =>
-            {
-                var tex = NewTexture(Size);
-                for (int i = 0; i < Size; i++)
-                {
-                    for (int w = 0; w < 2; w++)
-                    {
-                        tex.SetPixel(i, w, Color.white);
-                        tex.SetPixel(i, Size - 1 - w, Color.white);
-                        tex.SetPixel(w, i, Color.white);
-                        tex.SetPixel(Size - 1 - w, i, Color.white);
-                    }
-                }
-                return Finish(tex);
-            });
-        }
-
         public static Sprite Arrow()
         {
             return Cached("arrow", () =>
@@ -80,34 +60,6 @@ namespace DessertFactory
                     int halfWidth = (28 - y) / 2;
                     for (int x = 16 - halfWidth; x < 16 + halfWidth; x++)
                         tex.SetPixel(x, y, Color.white);
-                }
-                return Finish(tex);
-            });
-        }
-
-        public static Sprite Belt()
-        {
-            return Cached("belt", () =>
-            {
-                var baseColor = new Color(0.35f, 0.33f, 0.32f);
-                var tex = NewTexture(Size);
-                var light = Color.Lerp(baseColor, Color.white, 0.35f);
-                var edge = Color.Lerp(baseColor, Color.black, 0.4f);
-
-                for (int y = 0; y < Size; y++)
-                {
-                    for (int x = 0; x < Size; x++)
-                    {
-                        if (x < 3 || x > Size - 4)
-                        {
-                            tex.SetPixel(x, y, edge);
-                            continue;
-                        }
-
-                        int d = Mathf.FloorToInt(Mathf.Abs(x - 15.5f));
-                        bool chevron = (y + d) % 10 < 2;
-                        tex.SetPixel(x, y, chevron ? light : baseColor);
-                    }
                 }
                 return Finish(tex);
             });

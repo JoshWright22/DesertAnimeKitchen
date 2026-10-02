@@ -8,21 +8,14 @@ namespace DessertFactory
 
         public override bool TryInsert(ItemDef item, Vector2Int fromCell)
         {
-            if (item.isDessert)
-            {
-                Factory.Stockpile.Sell(item);
-                sold++;
-            }
-            else
-            {
-                Factory.Stockpile.Add(item);
-            }
+            Factory.Stockpile.Sell(item);
+            sold++;
             return true;
         }
 
         public override string GetStatus()
         {
-            return $"Sold {sold} desserts";
+            return $"Sold {sold}";
         }
     }
 }

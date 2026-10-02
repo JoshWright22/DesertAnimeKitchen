@@ -28,6 +28,11 @@ namespace DessertFactory
             return (Direction)(((int)dir + 1) % 4);
         }
 
+        public static Direction Opposite(this Direction dir)
+        {
+            return (Direction)(((int)dir + 2) % 4);
+        }
+
         public static float ToAngle(this Direction dir)
         {
             return -90f * (int)dir;

@@ -6,9 +6,6 @@ namespace DessertFactory
 {
     public class CookGirl : Building
     {
-        // how many batches worth of ingredients she'll hold onto
-        const int BufferBatches = 2;
-
         readonly Dictionary<ItemDef, int> inputs = new Dictionary<ItemDef, int>();
         readonly Queue<ItemDef> finished = new Queue<ItemDef>();
 
@@ -17,22 +14,36 @@ namespace DessertFactory
         bool cooking;
 
         public RecipeDef Recipe => Def.recipes.Count > 0 ? Def.recipes[recipeIndex] : null;
+        public int RecipeIndex => recipeIndex;
+        public bool Cooking => cooking;
+        public float Progress => cooking && Recipe != null ? progress / Recipe.craftTime : 0f;
+        public bool Blocked => finished.Count > 0;
 
-        public void NextRecipe()
+        // Until you pick a recipe for her she makes whatever the first ingredient to show up is for
+        public bool PickedByHand { get; private set; }
+
+        public bool Knows(RecipeDef recipe) => Factory.Stockpile.Knows(recipe);
+
+        // how many of her recipes corporate has shipped so far
+        public int KnownRecipes => Def.recipes.FindAll(Knows).Count;
+
+        public int Has(ItemDef item)
         {
-            if (Def.recipes.Count == 0)
-                return;
-
-            SetRecipe(recipeIndex + 1);
+            inputs.TryGetValue(item, out int have);
+            return have;
         }
 
         public void SetRecipe(int index)
         {
             if (Def.recipes.Count == 0)
                 return;
+            index = (index % Def.recipes.Count + Def.recipes.Count) % Def.recipes.Count;
+            if (!Knows(Def.recipes[index]))
+                return;
 
-            ReturnEverything();
-            recipeIndex = (index % Def.recipes.Count + Def.recipes.Count) % Def.recipes.Count;
+            DropEverything();
+            recipeIndex = index;
+            PickedByHand = true;
         }
 
         public override bool TryInsert(ItemDef item, Vector2Int fromCell)
@@ -41,14 +52,43 @@ namespace DessertFactory
                 return false;
 
             int needed = Recipe.InputAmount(item);
-            if (needed == 0)
-                return false;
+            if (needed == 0 && !PickedByHand && IsEmpty())
+                needed = SwitchToRecipeFor(item);
 
-            inputs.TryGetValue(item, out int have);
-            if (have >= needed * BufferBatches)
+            // she only holds one batch worth, anything she can't use or has no room for waits on the belt
+            int have = Has(item);
+            if (have >= needed)
                 return false;
 
             inputs[item] = have + 1;
+            return true;
+        }
+
+        int SwitchToRecipeFor(ItemDef item)
+        {
+            for (int i = 0; i < Def.recipes.Count; i++)
+            {
+                if (!Knows(Def.recipes[i]))
+                    continue;
+                int amount = Def.recipes[i].InputAmount(item);
+                if (amount > 0)
+                {
+                    recipeIndex = i;
+                    return amount;
+                }
+            }
+            return 0;
+        }
+
+        bool IsEmpty()
+        {
+            if (cooking)
+                return false;
+            foreach (var pair in inputs)
+            {
+                if (pair.Value > 0)
+                    return false;
+            }
             return true;
         }
 
@@ -57,8 +97,8 @@ namespace DessertFactory
             while (finished.Count > 0 && TryPushForward(finished.Peek()))
                 finished.Dequeue();
 
-            // don't start another batch while the last one is stuck
-            if (Recipe == null || finished.Count > 0)
+            // don't start another batch while the front is backed up
+            if (Recipe == null || Blocked)
                 return;
 
             if (!cooking && HasIngredients())
@@ -88,37 +128,19 @@ namespace DessertFactory
         {
             foreach (var input in Recipe.inputs)
             {
-                inputs.TryGetValue(input.item, out int have);
-                if (have < input.amount)
+                if (Has(input.item) < input.amount)
                     return false;
             }
             return true;
         }
 
-        void ReturnEverything()
+        // switching recipes or picking her up throws out whatever she had on the go
+        void DropEverything()
         {
-            foreach (var pair in inputs)
-            {
-                if (pair.Value > 0)
-                    Factory.Stockpile.Add(pair.Key, pair.Value);
-            }
             inputs.Clear();
-
-            while (finished.Count > 0)
-                Factory.Stockpile.Add(finished.Dequeue());
-
-            if (cooking)
-            {
-                foreach (var input in Recipe.inputs)
-                    Factory.Stockpile.Add(input.item, input.amount);
-            }
+            finished.Clear();
             cooking = false;
             progress = 0f;
-        }
-
-        public override void OnRemoved()
-        {
-            ReturnEverything();
         }
 
         public override string GetStatus()
@@ -129,19 +151,18 @@ namespace DessertFactory
             var sb = new StringBuilder();
             sb.Append("Making ").Append(Recipe.displayName);
 
-            if (finished.Count > 0)
+            if (Blocked)
                 sb.Append(" - output blocked");
             else if (cooking)
-                sb.Append($" - {Mathf.RoundToInt(progress / Recipe.craftTime * 100f)}%");
+                sb.Append($" - {Mathf.RoundToInt(Progress * 100f)}%");
 
             sb.Append("\nNeeds: ");
             for (int i = 0; i < Recipe.inputs.Count; i++)
             {
                 var input = Recipe.inputs[i];
-                inputs.TryGetValue(input.item, out int have);
                 if (i > 0)
                     sb.Append(", ");
-                sb.Append($"{input.item.displayName} {have}/{input.amount}");
+                sb.Append($"{input.item.displayName} {Has(input.item)}/{input.amount}");
             }
             return sb.ToString();
         }

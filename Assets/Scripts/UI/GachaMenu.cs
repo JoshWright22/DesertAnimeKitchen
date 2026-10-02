@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,48 +8,65 @@ namespace DessertFactory
     {
         [SerializeField] Gacha gacha;
         [SerializeField] Button rollButton;
-        [SerializeField] Text rollText;
+        [SerializeField] TMP_Text rollText;
 
         [Header("Result")]
-        [SerializeField] GameObject resultPanel;
+        [Tooltip("Pops up over the roll button and fades away by itself, the factory never stops for it")]
+        [SerializeField] CanvasGroup resultPanel;
         [SerializeField] Image resultImage;
-        [SerializeField] Text resultText;
-        [SerializeField] Button continueButton;
+        [SerializeField] TMP_Text resultText;
+        [SerializeField] float showResultFor = 3f;
+        [SerializeField] float fadeTime = 0.5f;
 
-        CharacterDef pulled;
+        float resultLeft;
+        int shownCost = -1;
 
         void Start()
         {
-            rollText.text = $"Roll for a girl\n{gacha.RollCost} stars";
             rollButton.onClick.AddListener(Roll);
-            continueButton.onClick.AddListener(CloseResult);
-            resultPanel.SetActive(false);
+            resultPanel.gameObject.SetActive(false);
         }
 
         void Update()
         {
-            rollButton.interactable = gacha.CanRoll && !resultPanel.activeSelf;
+            rollButton.interactable = gacha.CanRoll;
+            if (shownCost != gacha.RollCost)
+            {
+                shownCost = gacha.RollCost;
+                rollText.text = shownCost == 0 ? "Roll for a girl\nFree!" : $"Roll for a girl\n{shownCost:N0} stars";
+            }
+
+            if (resultLeft <= 0f)
+                return;
+            resultLeft -= Time.unscaledDeltaTime;
+            resultPanel.alpha = Mathf.Clamp01(resultLeft / fadeTime);
+            if (resultLeft <= 0f)
+                resultPanel.gameObject.SetActive(false);
         }
 
         void Roll()
         {
-            pulled = gacha.Roll(out bool firstTime);
-            if (pulled == null)
+            var pull = gacha.Roll();
+            if (pull.girl == null)
                 return;
 
-            var job = pulled.building;
-            resultImage.sprite = job.sprite != null ? job.sprite : pulled.portrait;
+            var girl = pull.girl;
+            if (pull.recipe != null)
+            {
+                resultImage.sprite = pull.recipe.outputs[0].item.icon;
+                resultText.text = $"New recipe!\n<b>{girl.displayName}</b> can make <b>{pull.recipe.displayName}</b>";
+            }
+            else
+            {
+                resultImage.sprite = girl.building.sprite != null ? girl.building.sprite : girl.portrait;
+                resultText.text = pull.firstTime
+                    ? $"New girl!\n<b>{girl.displayName}</b> x{pull.copies} joined the team"
+                    : $"<b>{girl.displayName}</b> x{pull.copies}!\nMore of her to place";
+            }
             resultImage.enabled = resultImage.sprite != null;
-            resultText.text = firstTime
-                ? $"New girl!\n<b>{pulled.displayName}</b> joined as a {job.displayName}"
-                : $"<b>{pulled.displayName}</b> again!\nYou can place one more {job.displayName}";
-            resultPanel.SetActive(true);
-        }
-
-        void CloseResult()
-        {
-            resultPanel.SetActive(false);
-            gacha.PlayNextScene(pulled);
+            resultPanel.gameObject.SetActive(true);
+            resultPanel.alpha = 1f;
+            resultLeft = showResultFor;
         }
     }
 }

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 052791865efd89f4ca7d6ba1076d74b5, type: 3}
+  m_Name: Ice Cream Land
+  m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.DepositDef
+  displayName: Ice Cream Land
+  items:
+  - {fileID: 11400000, guid: 6f8589fb49054770b69fcf9031b46a09, type: 2}
+  tiles:
+  - {fileID: 21300000, guid: 7f6191c95aac4db8a35c21cf122396da, type: 3}
+  - {fileID: 21300000, guid: ed8535f5b9d6423d8c01922a4aee8ff2, type: 3}
+  - {fileID: 21300000, guid: 803aeb957e014970bf6969c03a653c50, type: 3}
+  - {fileID: 21300000, guid: d663b03c6ecd47df8ae8088314ffbd0d, type: 3}
+  - {fileID: 21300000, guid: a3c1114e5523402f88b2bf1cfb8369b2, type: 3}
+  - {fileID: 21300000, guid: 94c63f10a6a748bc8a8f4f2f9bd6ca8b, type: 3}
+  - {fileID: 21300000, guid: b3703f04c5f74b4a990ebcdc453eeca0, type: 3}
+  - {fileID: 21300000, guid: 11b6f95c79c341a794f146ff08684350, type: 3}
+  - {fileID: 21300000, guid: 0d6f13527dda49b8b587959f35aa2a5f, type: 3}
+  patchCount: 3
+  patchRadius: 4

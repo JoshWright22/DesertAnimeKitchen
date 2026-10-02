@@ -13,13 +13,14 @@ namespace DessertFactory
         [SerializeField] SpriteRenderer ghostArrow;
 
         GameContent content;
+        Campaign campaign;
 
         public BuildingDef Selected { get; private set; }
         public Direction Facing { get; private set; } = Direction.Right;
         public Vector2Int HoveredCell { get; private set; }
+        public Vector2 PointerWorld { get; private set; }
         public Vector2Int PlacementOrigin { get; private set; }
         public bool PointerOverWorld { get; private set; }
-        public string PlaceError { get; private set; }
 
         void Awake()
         {
@@ -27,14 +28,20 @@ namespace DessertFactory
                 ghostArrow.sprite = SpriteFactory.Arrow();
         }
 
-        // Content can be made at startup, so it gets handed over instead of assigned
-        public void Init(GameContent content)
+        // Handed over by the bootstrap so every system reads the same content
+        public void Init(GameContent content, Campaign campaign)
         {
             this.content = content;
+            this.campaign = campaign;
         }
 
         public void Select(BuildingDef def)
         {
+            // girls you haven't pulled yet can't be picked up at all
+            if (def != null && (campaign.IsLocked(def) || factory.Stockpile.IsGachaGirl(def) && !factory.Stockpile.HasMet(def)))
+                return;
+            if (def != null)
+                hud.HideRecipes();
             Selected = def;
             RefreshGhostSprite();
         }
@@ -47,29 +54,52 @@ namespace DessertFactory
                 return;
 
             HandleHotkeys(keyboard);
+            if (Selected != null && campaign.IsLocked(Selected))
+                Select(null);
 
             var screenPos = mouse.position.ReadValue();
             PointerOverWorld = !hud.IsPointerOverUi();
-            HoveredCell = factory.Map.WorldToCell(cam.ScreenToWorldPoint(screenPos));
+            PointerWorld = cam.ScreenToWorldPoint(screenPos);
+            HoveredCell = factory.Map.WorldToCell(PointerWorld);
 
             UpdateGhost();
 
             if (!PointerOverWorld)
                 return;
 
-            if (Selected != null)
+            // X or Delete picks up whatever's under the cursor, even while you're holding something
+            if (keyboard.xKey.isPressed || keyboard.deleteKey.isPressed)
             {
-                if (mouse.leftButton.isPressed && factory.CanPlace(Selected, PlacementOrigin, Facing, out _))
-                    factory.Place(Selected, PlacementOrigin, Facing);
+                factory.Remove(HoveredCell);
             }
-            else if (mouse.leftButton.wasPressedThisFrame && factory.GetBuilding(HoveredCell) is CookGirl cook)
+            else if (Selected != null)
             {
-                cook.NextRecipe();
+                if (mouse.leftButton.isPressed)
+                    factory.Place(Selected, PlacementOrigin, Facing, overwrite: CurrentOverwrite(mouse));
+            }
+            else if (mouse.leftButton.wasPressedThisFrame)
+            {
+                // click a cook to see her recipe, click anywhere else to put it away
+                if (factory.GetBuilding(HoveredCell) is CookGirl cook)
+                    hud.ShowRecipes(cook);
+                else
+                    hud.HideRecipes();
             }
 
-            // right drag pans the camera, a plain right click removes
+            // right drag pans the camera. A plain right click turns what you're placing, or removes when you aren't placing.
             if (mouse.rightButton.wasReleasedThisFrame && !cameraController.DraggedThisPress)
-                factory.Remove(HoveredCell);
+            {
+                if (Selected != null)
+                    Rotate();
+                else
+                    factory.Remove(HoveredCell);
+            }
+        }
+
+        // A fresh click can put anything down on top of anything, holding it down only reroutes belts
+        static Factory.Overwrite CurrentOverwrite(Mouse mouse)
+        {
+            return mouse.leftButton.wasPressedThisFrame ? Factory.Overwrite.Anything : Factory.Overwrite.Belts;
         }
 
         void HandleHotkeys(Keyboard keyboard)
@@ -84,10 +114,13 @@ namespace DessertFactory
                 Select(null);
 
             if (keyboard.rKey.wasPressedThisFrame)
-            {
-                Facing = Facing.RotateClockwise();
-                RefreshGhostSprite();
-            }
+                Rotate();
+        }
+
+        void Rotate()
+        {
+            Facing = Facing.RotateClockwise();
+            RefreshGhostSprite();
         }
 
         void RefreshGhostSprite()
@@ -96,7 +129,7 @@ namespace DessertFactory
                 return;
 
             var prefab = Selected.prefab;
-            ghost.sprite = prefab.SpriteFor(Selected);
+            ghost.sprite = prefab.SpriteFor(Selected, Facing);
             if (ghost.sprite == null)
                 prefab.ShowPlaceholder(ghost);
             ghost.transform.rotation = prefab.TurnsBody ? Quaternion.Euler(0, 0, Facing.ToAngle()) : Quaternion.identity;
@@ -107,8 +140,7 @@ namespace DessertFactory
         {
             bool show = Selected != null && PointerOverWorld;
             ghost.gameObject.SetActive(show);
-            ghostArrow.gameObject.SetActive(show && Selected.prefab.HasOutputArrow);
-            PlaceError = null;
+            ghostArrow.gameObject.SetActive(show && Selected.prefab.ShowsFacing);
             if (!show)
                 return;
 
@@ -123,9 +155,13 @@ namespace DessertFactory
             var output = Building.GetOutputCell(PlacementOrigin, size, Facing);
             ghostArrow.transform.position = Vector3.Lerp(map.CellToWorld(output - Facing.ToOffset()), map.CellToWorld(output), 0.42f);
 
-            bool ok = factory.CanPlace(Selected, PlacementOrigin, Facing, out string reason);
-            PlaceError = reason;
-            ghost.color = ok ? new Color(0.6f, 1f, 0.6f, 0.7f) : new Color(1f, 0.4f, 0.4f, 0.6f);
+            bool ok = factory.CanPlace(Selected, PlacementOrigin, Facing, out _, overwrite: Factory.Overwrite.Anything);
+            if (!ok)
+                ghost.color = new Color(1f, 0.4f, 0.4f, 0.6f);
+            else if (factory.WouldReplace)
+                ghost.color = new Color(1f, 0.85f, 0.4f, 0.7f);
+            else
+                ghost.color = new Color(0.6f, 1f, 0.6f, 0.7f);
             ghostArrow.color = ghost.color;
         }
     }

@@ -10,6 +10,8 @@ namespace DessertFactory
         [TextArea] public string description;
         public Building prefab;
         public int price = 10;
+        [Tooltip("Paid at the end of every workday for each one placed")]
+        public int wage;
         [Tooltip("Footprint in cells when facing up")]
         public Vector2Int size = Vector2Int.one;
 
@@ -22,5 +24,7 @@ namespace DessertFactory
         public float workTime = 1f;
         public bool needsDeposit;
         public List<RecipeDef> recipes = new List<RecipeDef>();
+        [Tooltip("She shows up knowing the first this many recipes in her list, the rest come from the gacha")]
+        public int startingRecipes = 1;
     }
 }

@@ -15,11 +15,49 @@ namespace DessertFactory
             public SpriteRenderer view;
         }
 
+        [Header("Look")]
+        [SerializeField] Sprite vertical;
+        [SerializeField] Sprite horizontal;
+        [Tooltip("Belt ends, named after the side that's capped off")]
+        [SerializeField] Sprite endUp;
+        [SerializeField] Sprite endDown;
+        [SerializeField] Sprite endLeft;
+        [SerializeField] Sprite endRight;
+
         readonly List<BeltItem> items = new List<BeltItem>();
 
-        public override void ShowPlaceholder(SpriteRenderer target)
+        // the art has no arrows, so the ghost shows which way it'll run
+        public override bool ShowsFacing => true;
+
+        public override Sprite SpriteFor(BuildingDef def, Direction facing)
         {
-            target.sprite = SpriteFactory.Belt();
+            return facing == Direction.Up || facing == Direction.Down ? vertical : horizontal;
+        }
+
+        // Caps the front if the line stops here, otherwise the back if nothing feeds in from behind
+        public override void NeighboursChanged()
+        {
+            var behind = Origin - Facing.ToOffset();
+            bool leadsOn = Factory.GetBuilding(OutputCell) is Conveyor;
+            bool fedFromBehind = Factory.GetBuilding(behind) is Conveyor back && back.OutputCell == Origin;
+
+            if (!leadsOn)
+                Body.sprite = EndFacing(Facing);
+            else if (!fedFromBehind)
+                Body.sprite = EndFacing(Facing.Opposite());
+            else
+                Body.sprite = SpriteFor(Def, Facing);
+        }
+
+        Sprite EndFacing(Direction side)
+        {
+            switch (side)
+            {
+                case Direction.Up: return endUp;
+                case Direction.Right: return endRight;
+                case Direction.Down: return endDown;
+                default: return endLeft;
+            }
         }
 
         public override bool TryInsert(ItemDef item, Vector2Int fromCell)
@@ -65,14 +103,29 @@ namespace DessertFactory
             }
         }
 
+        // whatever was riding on it falls off into the sand
         public override void OnRemoved()
         {
             foreach (var beltItem in items)
-            {
-                Factory.Stockpile.Add(beltItem.item);
                 Factory.ItemViews.Release(beltItem.view);
-            }
             items.Clear();
+        }
+
+        // The item drawn closest to a point, for the hover tag
+        public ItemDef ItemNear(Vector2 point)
+        {
+            ItemDef nearest = null;
+            float best = float.MaxValue;
+            foreach (var beltItem in items)
+            {
+                float distance = ((Vector2)beltItem.view.transform.position - point).sqrMagnitude;
+                if (distance < best)
+                {
+                    best = distance;
+                    nearest = beltItem.item;
+                }
+            }
+            return nearest;
         }
 
         public override string GetStatus()

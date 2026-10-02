@@ -1,0 +1,79 @@
+title: Day_6_End
+---
+// after hours, whoever you've been siding with comes looking for you
+<<if $corporate > $workers>>
+Your phone buzzes after closing. It's Corporate. She never calls this late.
+Jennifer: You're still up. Good. I was going over your numbers.
+Jennifer: They're not terrible. That's the nicest thing I've said to anyone this quarter.
+-> Was that a compliment?
+    <<set $corporate += 1>>
+    Jennifer: It was a performance review. Don't frame it.
+    Jennifer: ...Fine. Frame it. Somewhere I can't see it.
+-> Are you still at the office?
+    Jennifer: Where else would I be? ...Don't answer that.
+-> You could've just emailed.
+    Jennifer: I could have. #scolding
+Jennifer: Go to bed. I need you sharp tomorrow. For the *numbers*.
+<<elseif $workers > $corporate>>
+The girls have all gone home. Red Velvet is still sitting on the stall counter, watching the dunes go pink.
+Red Velvet: Oh! Boss. I was just...erm...checking the stall. It's very checked. #cringe
+Red Velvet: You know, nobody from corporate ever came out here after five. You're different.
+-> Mind if I sit?
+    <<set $workers += 1>>
+    Red Velvet: Oh! Erm...no! I mean yes. I mean sit! There's room. There's lots of room. #cringe
+    You watch the sun go down. Neither of you mentions how much room there is.
+-> Don't stay out too late.
+    Red Velvet: I won't! Goodnight, boss.
+<<endif>>
+===
+title: Day_11_End
+---
+<<if $corporate > $workers>>
+Your phone rings. You pick up before the first ring is over, which she notices.
+Jennifer: Eager. Good. The board saw your wage report. Flat as a desert, they loved it.
+Jennifer: I told them I picked you myself.
+Jennifer: I didn't, by the way. You were just the only one who didn't cry at the donuts.
+-> So you did pick me.
+    <<set $corporate += 1>>
+    Jennifer: Don't push it.
+    Jennifer: ...Yes.
+-> Just doing my job.
+    Jennifer: Then keep doing it. I'm getting used to these calls. I mean the *numbers*. #scolding
+<<elseif $workers > $corporate>>
+There's a knock on the shack door. Red Velvet is holding a cake box like it might explode.
+Red Velvet: I made this. For the stall. But it came out wrong, so...erm...it's yours now.
+Red Velvet: It's heart shaped. That's the wrong part. It was supposed to be round. I don't know what happened. #cringe
+-> I love it.
+    <<set $workers += 1>>
+    Red Velvet: You...okay! Good! That's good! I'm going to go now! Goodnight! #cringe
+    She's gone before you can say goodnight back. The cake is very good.
+-> Thanks, Red Velvet.
+    Red Velvet: Anytime, boss! Don't let Honey see it, she'll want one.
+<<endif>>
+===
+title: Day_14_End
+---
+<<if $corporate > $workers>>
+Your phone rings. It's late. It's always late now.
+Jennifer: Tomorrow's the big day. I wanted to make sure you hadn't wandered into a dune.
+Jennifer: If you hit the number, they'll bring you to headquarters. There's an empty office on the top floor.
+Jennifer: It's next to mine. I'm just telling you where it is. For directions.
+-> I'll be there.
+    <<set $corporate += 1>>
+    Jennifer: ...Good. I'll have them clean the sand out of the elevator.
+-> And if I miss?
+    Jennifer: Then I never liked you. Which will be easy, because I don't. #scolding
+    Jennifer: Don't miss.
+<<elseif $workers > $corporate>>
+The girls throw a little party at the stall. Burnt croissants, mostly. Red Velvet finds you at the edge of the lights.
+Red Velvet: Tomorrow corporate decides what happens to us. To all of this.
+Red Velvet: Whatever they say...erm...I'm glad it was you. Out here. With us.
+Red Velvet: With me. I mean, with us! Me is part of us. #cringe
+-> I'm glad it was you too.
+    <<set $workers += 1>>
+    Red Velvet: ...Yeah?
+    She leans her head on your shoulder. Honey makes a noise and Mocha elbows her.
+-> Get some sleep, Red Velvet.
+    Red Velvet: You too, boss. Big day.
+<<endif>>
+===

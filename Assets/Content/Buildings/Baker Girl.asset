@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be2d7244aafe9594f9008eb0dfd4890e, type: 3}
+  m_Name: Baker Girl
+  m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.BuildingDef
+  displayName: Mocha
+  description: Bakes from one or two ingredients, like dough into bread. Click her
+    to see or change her recipe.
+  prefab: {fileID: 3377430705895170680, guid: eb4f64cc01bce2541b8edc8830a481b0, type: 3}
+  price: 1750
+  wage: 40000
+  size: {x: 1, y: 1}
+  sprite: {fileID: 21300000, guid: 7f208749c8a88584e81bfd9c3b9a1368, type: 3}
+  workTime: 1
+  needsDeposit: 0
+  recipes:
+  - {fileID: 11400000, guid: 401c7692ec74ba349910a7a56cd70666, type: 2}
+  - {fileID: 11400000, guid: 19ae610b136b2c542b6833fd10361880, type: 2}
+  - {fileID: 11400000, guid: aef9dc05a5239db4386715e838c3e682, type: 2}
+  - {fileID: 11400000, guid: 2c0a56e013734db3802d911963cc1a0f, type: 2}
+  - {fileID: 11400000, guid: 0a0298a08a5b454f924ba23af17a66c1, type: 2}
+  - {fileID: 11400000, guid: 4993c2c32c7b21945bc66cddf75abfaa, type: 2}

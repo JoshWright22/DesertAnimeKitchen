@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8eac60e6e24f8141a1e09f2b1aa7115, type: 3}
+  m_Name: Pumpkin
+  m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.ItemDef
+  displayName: Pumpkin
+  color: {r: 1, g: 1, b: 1, a: 1}
+  icon: {fileID: 21300000, guid: 35b8a83457ff448eb3548dce9fd7dff8, type: 3}
+  sparkle:
+  - {fileID: 21300000, guid: fe7d08548a774c35bbc2a90c363e4c2e, type: 3}
+  - {fileID: 21300000, guid: 0e7645870005420b85c838d2c6b149d7, type: 3}
+  sparkleEvery: 1.6
+  sparkleFrameTime: 0.09
+  sellPrice: 400
+  stars: 0

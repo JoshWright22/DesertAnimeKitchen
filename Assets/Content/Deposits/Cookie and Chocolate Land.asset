@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 052791865efd89f4ca7d6ba1076d74b5, type: 3}
+  m_Name: Cookie and Chocolate Land
+  m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.DepositDef
+  displayName: Chocolate Land
+  items:
+  - {fileID: 11400000, guid: 37da83e55f3049bbbdc4f3656bce5d9c, type: 2}
+  tiles:
+  - {fileID: 21300000, guid: 65466afdfb0b4c53bec4ba43d454c67b, type: 3}
+  - {fileID: 21300000, guid: d64206d020a64ef8ac18845792193e0a, type: 3}
+  - {fileID: 21300000, guid: b0baab218ae6404e82a3323d248b4f97, type: 3}
+  - {fileID: 21300000, guid: ddadd95c292f464ba5548bf6347f6bb2, type: 3}
+  - {fileID: 21300000, guid: 5f995577cf3048848bae74fb3515e760, type: 3}
+  - {fileID: 21300000, guid: 2efd01b374f14e5fab19220dd4674f9d, type: 3}
+  - {fileID: 21300000, guid: 9edecb413c574d0aa53eb5c033121bda, type: 3}
+  - {fileID: 21300000, guid: 70c254c247764ce9af2117cae93bb9c1, type: 3}
+  - {fileID: 21300000, guid: 1e1b73e94ee44e4bbe5a4ecdb3fa1551, type: 3}
+  patchCount: 4
+  patchRadius: 4

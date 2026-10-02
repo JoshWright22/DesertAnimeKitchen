@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 052791865efd89f4ca7d6ba1076d74b5, type: 3}
+  m_Name: Pumpkin Land
+  m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.DepositDef
+  displayName: Pumpkin Land
+  items:
+  - {fileID: 11400000, guid: 059bfda2ed5a4f048adee7baa84f0f04, type: 2}
+  tiles:
+  - {fileID: 21300000, guid: be9910cb65d047ea84a92c1119c5e13e, type: 3}
+  - {fileID: 21300000, guid: 6684c67dbff34b64bf8ec0e25085609e, type: 3}
+  - {fileID: 21300000, guid: 8882957442a14b07ab6f67026d2b97d9, type: 3}
+  - {fileID: 21300000, guid: 157ddd362aa44565a09b85455e0418ab, type: 3}
+  - {fileID: 21300000, guid: 4f74f1e272d741c1844734811818982e, type: 3}
+  - {fileID: 21300000, guid: 68e6b1b95d1442b8ad247a5534b3d7d8, type: 3}
+  - {fileID: 21300000, guid: 25732612beb74048af9e3ad50d411949, type: 3}
+  - {fileID: 21300000, guid: d51084f6c49b4fb8a9d6152d2fbfcc98, type: 3}
+  - {fileID: 21300000, guid: be6061166f2645d38de0bfb9a1a14457, type: 3}
+  patchCount: 3
+  patchRadius: 3.5

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20297318755208b4ab8b1b95a65bff23, type: 3}
+  m_Name: Jennifer
+  m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.CharacterDef
+  displayName: Jennifer
+  nameColor: {r: 0.95, g: 0.5, b: 0.7, a: 1}
+  building: {fileID: 0}
+  portrait: {fileID: 21300000, guid: d1c783f9f1344b1a9cc3db2ace8350a3, type: 3}
+  expressions:
+  - tag: scolding
+    sprite: {fileID: 21300000, guid: 46d17a597be94fa5a9323d0493f74fd2, type: 3}
+  alias: Corpo-sama
+  revealedBy: $knows_jennifer
+  rollWeight: 0
+  startingCopies: 0
+  story: []

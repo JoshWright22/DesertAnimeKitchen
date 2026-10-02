@@ -4,27 +4,30 @@ using UnityEngine.Tilemaps;
 
 namespace DessertFactory
 {
-    // Owns the grid: ground and deposit tilemaps plus cell <-> world conversion
+    // Owns the grid: sand and land tilemaps plus cell <-> world conversion
     [RequireComponent(typeof(Grid))]
     public class DesertMap : MonoBehaviour
     {
         [SerializeField] Tilemap groundLayer;
-        [SerializeField] Tilemap depositLayer;
-        [SerializeField] Tilemap depositGridLayer;
+        [Tooltip("Deposits, and cacti out on the open sand")]
+        [SerializeField] Tilemap landLayer;
         [SerializeField] SpriteRenderer gridLines;
-        [Tooltip("Sprite used for every ground/deposit tile. Tinted per cell. Leave empty for a plain square.")]
-        [SerializeField] Sprite tileSprite;
+
+        [Header("Desert")]
+        [SerializeField] Sprite sand;
+        [SerializeField] Sprite sandDune;
+        [SerializeField, Range(0f, 1f)] float duneChance = 0.05f;
+        [SerializeField] Sprite cactus;
+        [SerializeField, Range(0f, 1f)] float cactusChance = 0.012f;
 
         public int Width { get; private set; }
         public int Height { get; private set; }
         public Grid Grid { get; private set; }
 
         readonly List<DepositDef> depositTypes = new List<DepositDef>();
+        readonly Dictionary<Sprite, Tile> tiles = new Dictionary<Sprite, Tile>();
         int[] depositIndex;
-        int[] depositAmount;
-        Color[] sandColors;
-        Tile tile;
-        Tile outlineTile;
+        bool[] cacti;
 
         void Awake()
         {
@@ -38,27 +41,12 @@ namespace DessertFactory
             depositTypes.Clear();
             depositTypes.AddRange(deposits);
             depositIndex = new int[width * height];
-            depositAmount = new int[width * height];
-            sandColors = new Color[width * height];
-
-            CreateTiles();
+            cacti = new bool[width * height];
+            for (int i = 0; i < depositIndex.Length; i++)
+                depositIndex[i] = -1;
 
             var rng = new System.Random(seed);
             float noiseOffset = rng.Next(0, 10000);
-
-            var sandLight = new Color(0.93f, 0.8f, 0.55f);
-            var sandDark = new Color(0.82f, 0.66f, 0.42f);
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    // two octaves so the dunes don't look too smooth
-                    float n = Mathf.PerlinNoise(noiseOffset + x * 0.05f, noiseOffset + y * 0.05f) * 0.7f
-                              + Mathf.PerlinNoise(noiseOffset + x * 0.25f, noiseOffset + y * 0.25f) * 0.3f;
-                    sandColors[y * width + x] = Color.Lerp(sandDark, sandLight, n);
-                    depositIndex[y * width + x] = -1;
-                }
-            }
 
             if (scatterDeposits)
             {
@@ -77,20 +65,12 @@ namespace DessertFactory
                 }
             }
 
-            DrawGround();
+            for (int i = 0; i < cacti.Length; i++)
+                cacti[i] = depositIndex[i] < 0 && rng.NextDouble() < cactusChance;
+
+            DrawGround(rng);
             DrawAllDeposits();
             FitGridLines();
-        }
-
-        void CreateTiles()
-        {
-            tile = ScriptableObject.CreateInstance<Tile>();
-            tile.sprite = tileSprite != null ? tileSprite : SpriteFactory.Square();
-            tile.flags = TileFlags.None;
-
-            outlineTile = ScriptableObject.CreateInstance<Tile>();
-            outlineTile.sprite = SpriteFactory.CellOutline();
-            outlineTile.flags = TileFlags.None;
         }
 
         void PaintPatch(int type, Vector2 patchCenter, DepositDef deposit, float noiseSeed)
@@ -110,10 +90,7 @@ namespace DessertFactory
                     float wobble = 0.6f + Mathf.PerlinNoise(noiseSeed + x * 0.3f, noiseSeed + y * 0.3f) * 0.8f;
                     float dist = Vector2.Distance(new Vector2(x, y), patchCenter);
                     if (dist <= deposit.patchRadius * wobble)
-                    {
                         depositIndex[i] = type;
-                        depositAmount[i] = deposit.amountPerTile;
-                    }
                 }
             }
         }
@@ -134,55 +111,81 @@ namespace DessertFactory
                     continue;
                 int i = pos.y * Width + pos.x;
                 depositIndex[i] = type;
-                depositAmount[i] = deposit.amountPerTile;
-                RefreshDepositCell(pos);
+                cacti[i] = false;
             }
+
+            area.xMin--;
+            area.yMin--;
+            area.xMax++;
+            area.yMax++;
+            foreach (var pos in area.allPositionsWithin)
+                RefreshCell(pos);
         }
 
-        void DrawGround()
+        // Building over a cactus clears it away
+        public void ClearCactus(Vector2Int cell)
+        {
+            if (!InBounds(cell) || !cacti[cell.y * Width + cell.x])
+                return;
+            cacti[cell.y * Width + cell.x] = false;
+            RefreshCell(cell);
+        }
+
+        void DrawGround(System.Random rng)
         {
             groundLayer.ClearAllTiles();
-            var tiles = new TileBase[Width * Height];
-            for (int i = 0; i < tiles.Length; i++)
-                tiles[i] = tile;
-            groundLayer.SetTilesBlock(new BoundsInt(0, 0, 0, Width, Height, 1), tiles);
-
-            for (int y = 0; y < Height; y++)
-                for (int x = 0; x < Width; x++)
-                    groundLayer.SetColor(new Vector3Int(x, y, 0), sandColors[y * Width + x]);
+            var ground = new TileBase[Width * Height];
+            for (int i = 0; i < ground.Length; i++)
+                ground[i] = TileFor(rng.NextDouble() < duneChance ? sandDune : sand);
+            groundLayer.SetTilesBlock(new BoundsInt(0, 0, 0, Width, Height, 1), ground);
         }
 
         void DrawAllDeposits()
         {
-            depositLayer.ClearAllTiles();
-            depositGridLayer.ClearAllTiles();
+            landLayer.ClearAllTiles();
             for (int y = 0; y < Height; y++)
                 for (int x = 0; x < Width; x++)
-                    RefreshDepositCell(new Vector2Int(x, y));
+                    RefreshCell(new Vector2Int(x, y));
         }
 
-        void RefreshDepositCell(Vector2Int cell)
+        void RefreshCell(Vector2Int cell)
         {
+            if (!InBounds(cell))
+                return;
+
             var pos = new Vector3Int(cell.x, cell.y, 0);
-            int i = cell.y * Width + cell.x;
-            if (depositIndex[i] < 0)
+            var deposit = GetDeposit(cell);
+            if (deposit == null)
             {
-                depositLayer.SetTile(pos, null);
-                depositGridLayer.SetTile(pos, null);
+                landLayer.SetTile(pos, cacti[cell.y * Width + cell.x] ? TileFor(cactus) : null);
                 return;
             }
 
-            var deposit = depositTypes[depositIndex[i]];
-            depositGridLayer.SetTile(pos, outlineTile);
-            depositGridLayer.SetColor(pos, deposit.gridColor);
+            landLayer.SetTile(pos, TileFor(deposit.tiles[EdgeIndex(cell, deposit)]));
+        }
 
-            // speckle the deposit a bit so it reads as stuff in the sand
-            var color = deposit.groundColor;
-            if ((cell.x * 7 + cell.y * 13) % 5 == 0)
-                color = Color.Lerp(color, sandColors[i], 0.5f);
+        // Picks the edge piece from the 3x3 set by which sides border something else
+        int EdgeIndex(Vector2Int cell, DepositDef deposit)
+        {
+            bool up = GetDeposit(cell + Vector2Int.up) == deposit;
+            bool down = GetDeposit(cell + Vector2Int.down) == deposit;
+            bool left = GetDeposit(cell + Vector2Int.left) == deposit;
+            bool right = GetDeposit(cell + Vector2Int.right) == deposit;
 
-            depositLayer.SetTile(pos, tile);
-            depositLayer.SetColor(pos, color);
+            int row = !up ? 0 : !down ? 2 : 1;
+            int column = !left ? 0 : !right ? 2 : 1;
+            return row * 3 + column;
+        }
+
+        Tile TileFor(Sprite sprite)
+        {
+            if (!tiles.TryGetValue(sprite, out var tile) || tile == null)
+            {
+                tile = ScriptableObject.CreateInstance<Tile>();
+                tile.sprite = sprite;
+                tiles[sprite] = tile;
+            }
+            return tile;
         }
 
         void FitGridLines()
@@ -207,30 +210,6 @@ namespace DessertFactory
                 return null;
             int index = depositIndex[cell.y * Width + cell.x];
             return index < 0 ? null : depositTypes[index];
-        }
-
-        public int GetAmount(Vector2Int cell)
-        {
-            return InBounds(cell) ? depositAmount[cell.y * Width + cell.x] : 0;
-        }
-
-        public bool TryMine(Vector2Int cell, out ItemDef item)
-        {
-            item = null;
-            var deposit = GetDeposit(cell);
-            if (deposit == null)
-                return false;
-
-            int i = cell.y * Width + cell.x;
-            item = deposit.item;
-            depositAmount[i]--;
-
-            if (depositAmount[i] <= 0)
-            {
-                depositIndex[i] = -1;
-                RefreshDepositCell(cell);
-            }
-            return true;
         }
 
         public Vector2Int WorldToCell(Vector3 world)

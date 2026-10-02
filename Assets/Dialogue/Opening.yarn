@@ -1,0 +1,41 @@
+title: Opening
+---
+// who you've been siding with, the ending checks these
+<<declare $workers = 0>>
+<<declare $corporate = 0>>
+<<declare $knows_jennifer = false>>
+<<declare $umbrellas = false>>
+// handed over by the game before every scene
+<<declare $day = 1>>
+<<declare $days_left = 0>>
+<<declare $profit = "">>
+<<declare $goal = "">>
+<<declare $revenue_today = "">>
+<<declare $wages_today = "">>
+<<declare $on_track = false>>
+<<declare $milestone_today = false>>
+<<declare $overtime_week = false>>
+
+Another day working for Licorich Inc. Number one in candy. Number one in surprise layoffs.
+This morning you got called into a meeting. There were donuts on the table. Always a bad sign.
+Jennifer: Sit. Have a donut. We're restructuring.
+Jennifer: Good news, there's one position left. It's overseas and slightly sandy...
+Jennifer: We can assign you to it, or you can pack your bags.
+-> Where do I sign?
+    You signed before she finished the sentence.
+-> I'll pack my bags.
+    Jennifer: Great, you'll need them. The flight's at six.
+    She slides the contract over. Somehow it's already signed.
+Two flights and one very bumpy jeep ride later, you're standing in the sand. Your phone rings before your feet stop sinking.
+Jennifer: You made it. Look around. Take it all in.
+Jennifer: That shack is your office. And your factory. And your bedroom. You can infer the rest.
+Jennifer: The stall out front is where desserts turn into money. That's the only part I care about.
+Jennifer: Those three girls in aprons are your workforce. They think they'll be getting paid for baking. Let's not ruin that for them.
+Jennifer: And yes, the ground is made of dessert. Cake, cookie dough, ice cream. Legal says don't ask, so don't ask.
+-> Why is the ground made of dessert?
+    Jennifer: What did I *just* say? #scolding
+-> Got it. No questions.
+    Jennifer: Look at that, you're learning already.
+Jennifer: Hit your numbers and you keep your job. Hit them hard enough and we'll talk about a promotion.
+<<jump Game_Start>>
+===

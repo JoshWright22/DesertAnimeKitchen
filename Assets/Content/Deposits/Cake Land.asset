@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 052791865efd89f4ca7d6ba1076d74b5, type: 3}
+  m_Name: Cake Land
+  m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.DepositDef
+  displayName: Cake Land
+  items:
+  - {fileID: 11400000, guid: 6c5d70d97b6f453684bfac978971e534, type: 2}
+  tiles:
+  - {fileID: 21300000, guid: 4b444c401b84469fb89c5726aecaf825, type: 3}
+  - {fileID: 21300000, guid: 0b2562590899458997817d1e3d0c0c77, type: 3}
+  - {fileID: 21300000, guid: ad88d3970dad4b918b3d859e54e36894, type: 3}
+  - {fileID: 21300000, guid: 12a88fe15b2c4a6a8549416da9ca7633, type: 3}
+  - {fileID: 21300000, guid: 26e1f7dda7bb44a59bb4fe9b19b98f30, type: 3}
+  - {fileID: 21300000, guid: 587c0d06a30046ada8038a0fb7c17327, type: 3}
+  - {fileID: 21300000, guid: 434a70824ad443e6b84f7ac419dcc26e, type: 3}
+  - {fileID: 21300000, guid: ad826f97a5cf450d8a79feb1f50e9ffb, type: 3}
+  - {fileID: 21300000, guid: 24535be708cd4af9984d889359c7906c, type: 3}
+  patchCount: 2
+  patchRadius: 3

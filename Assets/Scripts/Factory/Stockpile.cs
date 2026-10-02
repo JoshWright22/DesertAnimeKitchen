@@ -3,43 +3,56 @@ using System.Collections.Generic;
 
 namespace DessertFactory
 {
-    // Shared storage for the whole factory, there's no player inventory
+    // The factory's money, stars and girls, and a tally of everything the stall has sold. There's no player inventory.
     public class Stockpile
     {
-        readonly Dictionary<ItemDef, int> items = new Dictionary<ItemDef, int>();
-        // copies owned of each girl's building, anything not in here isn't limited
-        readonly Dictionary<BuildingDef, int> workers = new Dictionary<BuildingDef, int>();
+        readonly Dictionary<ItemDef, int> sold = new Dictionary<ItemDef, int>();
+        // copies pulled of each gacha girl, you can place that many of her. Anything not in here, like belts, isn't limited.
+        readonly Dictionary<BuildingDef, int> girls = new Dictionary<BuildingDef, int>();
+        // the girls only cook what corporate has shipped the recipe for
+        readonly HashSet<RecipeDef> recipes = new HashSet<RecipeDef>();
 
         public int Coins { get; private set; }
         public int Stars { get; private set; }
         public int DessertsSold { get; private set; }
-        public IReadOnlyDictionary<ItemDef, int> Items => items;
+        public IReadOnlyDictionary<ItemDef, int> Sold => sold;
+        public int RecipesKnown => recipes.Count;
+
+        // What corporate judges you on: everything sold, minus wages and other running costs, minus the loan
+        public int Revenue { get; private set; }
+        public int Expenses { get; private set; }
+        public int Debt { get; }
+        public int Profit => Revenue - Expenses - Debt;
 
         public event Action Changed;
 
-        public Stockpile(int startingCoins)
+        // The loan is the cash you start with, and it's owed back
+        public Stockpile(int loan)
         {
-            Coins = startingCoins;
+            Coins = loan;
+            Debt = loan;
         }
 
-        public void Add(ItemDef item, int amount = 1)
+        public void Sell(ItemDef item)
         {
-            items.TryGetValue(item, out int current);
-            items[item] = current + amount;
-            Changed?.Invoke();
-        }
-
-        public void Sell(ItemDef dessert)
-        {
-            Coins += dessert.sellPrice;
-            Stars += dessert.stars;
+            Coins += item.sellPrice;
+            Revenue += item.sellPrice;
+            Stars += item.stars;
             DessertsSold++;
+            sold.TryGetValue(item, out int count);
+            sold[item] = count + 1;
             Changed?.Invoke();
         }
 
         public void AddCoins(int amount)
         {
             Coins += amount;
+            Changed?.Invoke();
+        }
+
+        public void AddStars(int amount)
+        {
+            Stars += amount;
             Changed?.Invoke();
         }
 
@@ -52,6 +65,14 @@ namespace DessertFactory
             return true;
         }
 
+        // Wages and the like get paid whether you can afford them or not
+        public void Pay(int amount)
+        {
+            Coins -= amount;
+            Expenses += amount;
+            Changed?.Invoke();
+        }
+
         public bool TrySpendStars(int amount)
         {
             if (Stars < amount)
@@ -61,19 +82,34 @@ namespace DessertFactory
             return true;
         }
 
-        public bool IsLimited(BuildingDef def) => workers.ContainsKey(def);
+        public bool IsGachaGirl(BuildingDef def) => girls.ContainsKey(def);
 
         public int Owned(BuildingDef def)
         {
-            workers.TryGetValue(def, out int owned);
+            girls.TryGetValue(def, out int owned);
             return owned;
         }
 
-        // Adding 0 still marks the building as limited
-        public void AddWorkers(BuildingDef def, int amount = 1)
+        public bool HasMet(BuildingDef def) => Owned(def) > 0;
+
+        // Adding 0 still marks her as a gacha girl. Her first copy brings her starting recipes with her.
+        public void AddCopies(BuildingDef def, int amount)
         {
-            workers[def] = Owned(def) + amount;
+            if (!HasMet(def) && amount > 0)
+            {
+                for (int i = 0; i < def.startingRecipes && i < def.recipes.Count; i++)
+                    recipes.Add(def.recipes[i]);
+            }
+            girls[def] = Owned(def) + amount;
             Changed?.Invoke();
+        }
+
+        public bool Knows(RecipeDef recipe) => recipes.Contains(recipe);
+
+        public void Learn(RecipeDef recipe)
+        {
+            if (recipes.Add(recipe))
+                Changed?.Invoke();
         }
     }
 }

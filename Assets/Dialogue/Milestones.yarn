@@ -1,0 +1,104 @@
+title: Milestone_1
+---
+Your phone rings the second the girls clock out. She's been waiting.
+Jennifer: Day five. Let's see what you've got.
+Jennifer: {$profit}. Huh. I had money on you crying in a sand dune by now.
+Jennifer: Next milestone is {$goal} by day ten. Don't get comfortable, comfortable people get *replaced*.
+-> I'll double it. For you.
+    <<set $corporate += 1>>
+    Jennifer: Save the charm for the board. They're the ones who sign your checks.
+-> The girls did all the work.
+    <<set $workers += 1>>
+    Jennifer: The girls are a line item. *You're* the one I'm calling. #scolding
+===
+title: Milestone_2
+---
+Jennifer: Day ten. {$profit}. I've seen worse. I've *fired* worse. #scolding
+Jennifer: Last one. {$goal} by day fifteen. Hit it and we'll talk about your future. Miss it and we'll talk about your severance.
+<<if $overtime_week>>
+Jennifer: And you can send the drones home at five again. Don't make me regret it.
+<<overtime_every_day false>>
+<<set $overtime_week to false>>
+<<endif>>
+===
+title: Milestone_3
+---
+Day fifteen. The phone rings once, and you pick up.
+Jennifer: Moment of truth. {$profit}.
+Jennifer: ...Well. I'll be.
+===
+title: Ending_Fired
+---
+Your phone rings. You let it ring twice, which doesn't help.
+Jennifer: I'm looking at the numbers and the numbers are looking at me. {$profit}. #scolding
+Jennifer: That's not a profit, that's a cry for help. #scolding
+Jennifer: You're fired. Leave the drones, they're Licorich property. #scolding
+-> Can I at least keep a croissant?
+    Jennifer: Put it back. #scolding
+-> They're not drones. They have names.
+    Jennifer: And now they'll have a new manager. Goodbye.
+The jet comes back the next morning. This time the pilot turns the engines off, just to watch you walk.
+===
+title: Ending_Promoted
+---
+Jennifer: You actually did it. Three for three.
+Jennifer: Pack your bags. You're coming to Licorich headquarters. Corner office, no windows, the works.
+<<if not $knows_jennifer>>
+Jennifer: Oh, and it's Jennifer. Not Corpo-sama. You've earned that much.
+<<set $knows_jennifer to true>>
+<<endif>>
+Red Velvet: Congratulations, boss! We'll...erm...keep the ovens warm for the next one.
+The girls are already sweeping sand off the stall when the jet lands. Nobody waves.
+===
+title: Ending_Jennifer
+---
+Jennifer: You actually did it. Three for three.
+Jennifer: The board wants you at headquarters. Top floor. The office next to mine, like I said.
+<<if not $knows_jennifer>>
+Jennifer: And it's Jennifer. Not Corpo-sama. You've earned that much.
+<<set $knows_jennifer to true>>
+<<endif>>
+Jennifer: I'm also told I'm allowed one personal hire this year.
+Jennifer: That was a joke. Mostly. I've been told I'm bad at those. By the board.
+-> Is this you asking me to dinner?
+    Jennifer: It's me telling you there's a table for two at eight. Don't be late, I bill by the hour.
+-> I'd follow you anywhere, Jennifer.
+    Jennifer: ...Don't make it weird. #scolding
+    Jennifer: Eight o'clock. Wear something without sand on it.
+Red Velvet: Congratulations, boss. We'll...erm...keep the ovens warm for the next one. #cringe
+The jet lands at sunset. She's on it. She says she was in the area. Licorich doesn't have an area out here.
+===
+title: Ending_Red_Velvet
+---
+Red Velvet: Erm...boss? Before you answer that phone. We need to talk.
+Red Velvet: The girls and I took a vote. We're a union now. Fair wages, shade, and five o'clock means five o'clock.
+Red Velvet: They voted on something else too. I...erm...wasn't allowed to vote on that one. #cringe
+Red Velvet: They want you to stay. And I want...I also want you to stay. Not as our boss. Well, as our boss. But also not.
+You pick up the phone.
+Jennifer: What is this I'm hearing about a *union*?! #scolding
+-> I'm staying. With them.
+    Jennifer: Then enjoy the sand. That's all you'll be getting from Licorich. #scolding
+-> Can I call you back? I'm busy.
+    Jennifer: Don't you dare hang up on m- #scolding
+You hang up. Red Velvet is holding out half a burnt croissant.
+Red Velvet: It's the best one. I burnt it myself.
+-> Share it with her.
+    You split it. It's terrible. You both eat the whole thing anyway.
+-> Ask her to dinner.
+    Red Velvet: Dinner? Out here? There's only the stall. ...The stall's perfect.
+The jet never comes. You stop listening for it.
+===
+title: Ending_Unionized
+---
+Red Velvet: Erm...boss? Before you answer that phone. We need to talk. #cringe
+Red Velvet: The girls and I took a vote. We're a union now. Fair wages, shade, and five o'clock means five o'clock.
+Red Velvet: Also Honey says we keep the burnt ones. And Mocha says *all* the burnt ones.
+Red Velvet: And...we'd like you to stay. As our boss. If you want.
+You pick up the phone.
+Jennifer: What is this I'm hearing about a *union*?! #scolding
+-> I'm with them.
+    Jennifer: Then you can stay out there with them. Enjoy the sand. #scolding
+-> It was like this when I got here.
+    Jennifer: Of course it was. Don't bother coming back. #scolding
+The jet never comes. The croissants are better than ever.
+===

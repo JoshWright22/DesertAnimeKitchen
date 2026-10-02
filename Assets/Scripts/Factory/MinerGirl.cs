@@ -5,8 +5,12 @@ namespace DessertFactory
     public class MinerGirl : Building
     {
         float timer;
+        int mined;
         ItemDef holding;
         string status = "Starting";
+
+        // The land she's standing on, or null if she was put down off it
+        public DepositDef Digging => FindMineCell(out var cell) ? Factory.Map.GetDeposit(cell) : null;
 
         public override void Tick(float deltaTime)
         {
@@ -22,7 +26,7 @@ namespace DessertFactory
 
             if (!FindMineCell(out var cell))
             {
-                status = "Nothing left to mine";
+                status = "Nothing to mine here";
                 return;
             }
 
@@ -31,7 +35,9 @@ namespace DessertFactory
             if (timer >= Def.workTime)
             {
                 timer = 0f;
-                Factory.Map.TryMine(cell, out holding);
+                // lands with more than one ore hand them out in turn
+                var deposit = Factory.Map.GetDeposit(cell);
+                holding = deposit.items[mined++ % deposit.items.Count];
             }
         }
 
@@ -55,17 +61,11 @@ namespace DessertFactory
             return false;
         }
 
-        public override void OnRemoved()
-        {
-            if (holding != null)
-                Factory.Stockpile.Add(holding);
-        }
-
         public override string GetStatus()
         {
             if (!FindMineCell(out var cell))
                 return status;
-            return $"{status} ({Factory.Map.GetDeposit(cell).item.displayName}, {Factory.Map.GetAmount(cell)} left here)";
+            return $"{status} ({Factory.Map.GetDeposit(cell).displayName})";
         }
     }
 }

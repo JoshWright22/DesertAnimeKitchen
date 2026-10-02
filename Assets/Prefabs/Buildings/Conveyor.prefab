@@ -47,7 +47,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.Conveyor
   body: {fileID: 5677434792129214265}
   outputArrow: {fileID: 0}
-  turnBody: 1
+  turnBody: 0
+  vertical: {fileID: 21300000, guid: b7c10e5727ff448eab63fa9fdbcc2992, type: 3}
+  horizontal: {fileID: 21300000, guid: 5f46325a1e8743d48ed442bdbd942539, type: 3}
+  endUp: {fileID: 21300000, guid: c7b48aecf5c8425b963c73378f5da572, type: 3}
+  endDown: {fileID: 21300000, guid: 1c5afac12a224bfd8f864e52ec48ab99, type: 3}
+  endLeft: {fileID: 21300000, guid: 8eaef5c29c9a41769e95c9cc466994d9, type: 3}
+  endRight: {fileID: 21300000, guid: d728fd31af0a4ef0acf93769a77181eb, type: 3}
 --- !u!1 &6473499799258258656
 GameObject:
   m_ObjectHideFlags: 0
@@ -129,7 +135,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: b7c10e5727ff448eab63fa9fdbcc2992, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -137,5 +143,5 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0

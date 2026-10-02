@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8eac60e6e24f8141a1e09f2b1aa7115, type: 3}
+  m_Name: Bread
+  m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.ItemDef
+  displayName: Bread
+  color: {r: 1, g: 1, b: 1, a: 1}
+  icon: {fileID: 21300000, guid: 924c7e962d5d43f0b0c4801ba3d71188, type: 3}
+  sparkle:
+  - {fileID: 21300000, guid: 9d60363bd631445ea1978c549cd149d2, type: 3}
+  - {fileID: 21300000, guid: 943ae03cf8814d9cb99c668faa098039, type: 3}
+  sparkleEvery: 1.6
+  sparkleFrameTime: 0.09
+  sellPrice: 1550
+  stars: 1

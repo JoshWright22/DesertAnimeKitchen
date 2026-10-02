@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8eac60e6e24f8141a1e09f2b1aa7115, type: 3}
+  m_Name: Cookie
+  m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.ItemDef
+  displayName: Cookie
+  color: {r: 1, g: 1, b: 1, a: 1}
+  icon: {fileID: 21300000, guid: 43c5891abee44a44866090ebbbe09efe, type: 3}
+  sparkle:
+  - {fileID: 21300000, guid: 53ef133a499d4e0595591256c6ee762a, type: 3}
+  - {fileID: 21300000, guid: f677996a5a7943728e495b9bd446f001, type: 3}
+  sparkleEvery: 1.6
+  sparkleFrameTime: 0.09
+  sellPrice: 3600
+  stars: 3
