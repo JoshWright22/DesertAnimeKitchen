@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be2d7244aafe9594f9008eb0dfd4890e, type: 3}
   m_Name: Croissant Girl
   m_EditorClassIdentifier: Assembly-CSharp::DessertFactory.BuildingDef
-  displayName: 
-  description: 
-  prefab: {fileID: 0}
+  displayName: Croissant Girl
+  description: Bakes Croissant. Cwoissa.
+  prefab: {fileID: 3377430705895170680, guid: eb4f64cc01bce2541b8edc8830a481b0, type: 3}
   price: 10
   size: {x: 1, y: 1}
   sprite: {fileID: 0}
