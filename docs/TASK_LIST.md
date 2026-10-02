@@ -177,7 +177,7 @@ Each ore needs a ground tile for the map and a small icon for when it's riding a
 ## Design decisions still open
 The placeholder desert recipes are gone. Ores now go straight to the Baker Girl (Mocha) for simple desserts and the Pastry Girl (Red Velvet) for combos, all set up in `Assets/Content`.
 
-- [ ] Game name. Desert Anime Kitchen is just a temp name
+- [x] Game name. It's Licorich Inc., after the company that sends you out there
 - [x] Which ores give what, like whether fruit ore gives strawberries
 - [x] Which desserts each baker makes and what they need
 - [x] Whether there's a prep step or ores go straight to the bakers. No prep step means we can drop the prep girl

@@ -1,4 +1,4 @@
-# Desert Anime Kitchen
+# Licorich Inc.
 
 This is a top down factory game in Unity 6 where anime girl workers mine ingredients in a desert and turn them into desserts. You sell desserts for coins and stars, and the stars go into a gacha that gets you more girls. Every girl you pull also plays the next part of her story as a visual novel cutscene.
 
