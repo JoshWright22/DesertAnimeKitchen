@@ -101,6 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3492837206064708783}
   - component: {fileID: 3377430705895170680}
+  - component: {fileID: 2264031988880780203}
   m_Layer: 0
   m_Name: Cook Girl
   m_TagString: Untagged
@@ -140,6 +141,28 @@ MonoBehaviour:
   body: {fileID: 1709853037034018234}
   outputArrow: {fileID: 4389121995616489447}
   turnBody: 0
+--- !u!95 &2264031988880780203
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6459667114133168957}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4ac373849fe464542bffa3906c957ba9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6811276785363648285
 GameObject:
   m_ObjectHideFlags: 0
